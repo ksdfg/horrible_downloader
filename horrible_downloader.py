@@ -6,13 +6,16 @@ import requests
 from time import sleep
 import os
 from currently_watching import shows
+from user_preferences import preferences
 
 soup = bs(requests.get("https://horriblesubs.info/").text, features='html.parser')
 
 links = [i for i in soup.select('a[title = "See all releases for this show"]') if i.text in shows.keys()]
+if len(links) == 0:
+    print("Nothing to download today T-T")
+    exit(0)
 
-driver = wbd.Firefox(executable_path=r"C:\Users\ksdfg\AppData\Local\Programs\Python\Python37\Lib\site-packages"
-                                     r"\selenium\webdriver\firefox\geckodriver.exe")
+driver = wbd.Firefox(executable_path=preferences['driver_path'])
 driver.implicitly_wait(10)
 
 for link in links:
@@ -36,13 +39,13 @@ for link in links:
 
     sleep(1)
     try:
-        driver.find_element_by_css_selector(r'#\3' + ep[0] + ' ' + ep[1:] + '-1080p > span:nth-child(2) > a:nth-child(1)').click()
+        driver.find_element_by_css_selector(r'#\3' + ep[0] + ' ' + ep[1:] + '-' + preferences['quality'] + ' > span:nth-child(2) > a:nth-child(1)').click()
     except NoSuchElementException:
         print("Episode not yet released")
         continue
 
     sleep(1)
-    pog.click(780, 522)
+    pog.click(*preferences['clicks'][0])
 
     path = 'K:\\Videos\\' + link.text
     if not os.path.exists(path):
