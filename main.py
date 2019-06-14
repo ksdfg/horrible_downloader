@@ -1,12 +1,9 @@
 from selenium import webdriver as wbd
-from selenium.webdriver.common.keys import Keys
-from selenium.webdriver.support.wait import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
-from selenium.common.exceptions import TimeoutException
-from selenium.webdriver.common.by import By
+import pyautogui as pog
 from bs4 import BeautifulSoup as bs
 import requests
-import time
+from time import sleep
+import os
 
 xpath = {
     'search': r'/html/body/div[2]/div/div['r'2]/div[2]/div['r''r'1]/div/main/div['r''r'1]/article/div'r'/div['r''r'4]/form/input',
@@ -35,43 +32,38 @@ soup = bs(requests.get("https://horriblesubs.info/").text, features='html.parser
 
 links = [i for i in soup.select('a[title = "See all releases for this show"]') if i.text in shows]
 
-driver = wbd.Firefox()
+browser = wbd.Firefox()
+browser.implicitly_wait(10)
 
 for link in links:
 
     if link.text in shows:
 
-        print(link.get("href"))
-        driver.get("https://horriblesubs.info" + link.get("href"))
+        print(link.text)
+        browser.get("https://horriblesubs.info" + link.get("href"))
 
-        '''
-        try:
-            WebDriverWait(driver, 25).until(EC.presence_of_element_located((By.XPATH, xpath['search'])))
-            b = driver.find_element_by_xpath(xpath['search'])
-            b.send_keys("1"+Keys.ENTER)
-        except TimeoutException:
-            print("problem in", "search")
-        '''
+        browser.find_element_by_css_selector('#hs-search > input').send_keys('11')
+        pog.press('enter')
 
-        WebDriverWait(driver, 25).until(EC.presence_of_element_located((By.XPATH, xpath['search'])))
-        time.sleep(15)
-        b = driver.find_element_by_xpath(xpath['search'])
-        b.send_keys("1"+Keys.ENTER)
+        sleep(1)
+        browser.find_element_by_css_selector(r'.rls-label').click()
 
+        sleep(1)
+        browser.find_element_by_css_selector(r'#\31 1-1080p > span:nth-child(2) > a:nth-child(1)').click()
 
-        try:
-            WebDriverWait(driver, 25).until(EC.presence_of_element_located((By.XPATH, xpath['episode'])))
-        except TimeoutException:
-            print("problem in", "episode")
-        #time.sleep(2)
-        b = driver.find_element_by_xpath(xpath['episode'])
-        b.click()
+        sleep(1)
+        pog.click(780, 522)
 
-        try:
-            WebDriverWait(driver, 25).until(EC.presence_of_element_located((By.XPATH, xpath['magnet'])))
-        except TimeoutException:
-            print("problem in", "episode")
-        #time.sleep(2)
-        b = driver.find_element_by_xpath(xpath['magnet'])
-        b.click()
+        path = 'K:\\Videos\\' + link.text
+        if not os.path.exists(path):
+            os.mkdir(path)
+
+        sleep(3)
+        pog.typewrite(path)
+        pog.press('enter')
+        sleep(5)
+        pog.press('enter')
+
+        sleep(2)
+        pog.hotkey('alt', 'f4')
         #break
