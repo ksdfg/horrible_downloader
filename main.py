@@ -6,12 +6,6 @@ import requests
 from time import sleep
 import os
 
-xpath = {
-    'search': r'/html/body/div[2]/div/div['r'2]/div[2]/div['r''r'1]/div/main/div['r''r'1]/article/div'r'/div['r''r'4]/form/input',
-    'episode': r'/html/body/div[2]/div/div['r'2]/div[2]/div['r''r'1]/div/main/div['r'1]/article/div/div['r'4]/div['r''r'1]/div/a',
-    'magnet': r'/html/body/div[2]/div/div['r'2]/div[2]/div['r''r'1]/div/main/div['r'1]/article/div/div['r'4]/div['r''r''r'1]/div/div'r'/div['r'3]/span[2]/a '
-         }
-
 shows = [
     "Fruits Basket (2019)",
     "Senryuu Shoujo",
