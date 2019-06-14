@@ -40,8 +40,7 @@ for link in links:
 
     if link.text in shows:
 
-        print("\n", link.text, sep=""
-                                   "")
+        print("\n", link.text, sep="")
         browser.get("https://horriblesubs.info" + link.get("href"))
 
         browser.find_element_by_css_selector('#hs-search > input').send_keys('12')
