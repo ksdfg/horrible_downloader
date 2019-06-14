@@ -11,7 +11,8 @@ soup = bs(requests.get("https://horriblesubs.info/").text, features='html.parser
 
 links = [i for i in soup.select('a[title = "See all releases for this show"]') if i.text in shows.keys()]
 
-driver = wbd.Firefox()
+driver = wbd.Firefox(executable_path=r"C:\Users\ksdfg\AppData\Local\Programs\Python\Python37\Lib\site-packages"
+                                     r"\selenium\webdriver\firefox\geckodriver.exe")
 driver.implicitly_wait(10)
 
 for link in links:
