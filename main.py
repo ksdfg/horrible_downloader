@@ -6,34 +6,37 @@ import requests
 from time import sleep
 import os
 
-shows = [
-    "Fruits Basket (2019)",
-    "Senryuu Shoujo",
-    "Midara na Ao-chan wa Benkyou ga Dekinai",
-    "Hitoribocchi no Marumaru Seikatsu",
-    "Black Clover",
-    "Isekai Quartet",
-    "Sewayaki Kitsune no Senko-san",
-    "Tate no Yuusha no Nariagari",
-    "Kenja no Mago",
-    "Amazing Stranger",
-    "Joshikausei",
-    "Nobunaga-sensei no Osanazuma",
-    "Kimetsu no Yaiba",
-    "Bokutachi wa Benkyou ga Dekinai"
-]
+shows = {
+    "Fruits Basket (2019)": 12,
+    "Senryuu Shoujo": 12,
+    "Midara na Ao-chan wa Benkyou ga Dekinai": 12,
+    "Hitoribocchi no Marumaru Seikatsu": 12,
+    "Black Clover": 88,
+    "Isekai Quartet": 11,
+    "Sewayaki Kitsune no Senko-san": 10,
+    "Tate no Yuusha no Nariagari": 24,
+    "Kenja no Mago": 11,
+    "Amazing Stranger": 11,
+    "Joshikausei": 11,
+    "Nobunaga-sensei no Osanazuma": 11,
+    "Kimetsu no Yaiba": 11,
+    "Bokutachi wa Benkyou ga Dekinai": 11,
+    "One Punch Man S2": 10
+}
 
 soup = bs(requests.get("https://horriblesubs.info/").text, features='html.parser')
 
-links = [i for i in soup.select('a[title = "See all releases for this show"]') if i.text in shows]
+links = [i for i in soup.select('a[title = "See all releases for this show"]') if i.text in shows.keys()
+
+
+         ]
 
 browser = wbd.Firefox()
 browser.implicitly_wait(10)
 
 for link in links:
 
-    print("\n", link.text, sep=""
-                               "")
+    print("\n", link.text, sep="")
     browser.get("https://horriblesubs.info" + link.get("href"))
 
     browser.find_element_by_css_selector('#hs-search > input').send_keys('12')
@@ -71,4 +74,3 @@ for link in links:
     #break
 
 browser.close()
-
