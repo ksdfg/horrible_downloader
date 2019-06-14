@@ -32,45 +32,43 @@ browser.implicitly_wait(10)
 
 for link in links:
 
-    if link.text in shows:
+    print("\n", link.text, sep=""
+                               "")
+    browser.get("https://horriblesubs.info" + link.get("href"))
 
-        print("\n", link.text, sep=""
-                                   "")
-        browser.get("https://horriblesubs.info" + link.get("href"))
+    browser.find_element_by_css_selector('#hs-search > input').send_keys('12')
+    pog.press('enter')
 
-        browser.find_element_by_css_selector('#hs-search > input').send_keys('12')
-        pog.press('enter')
+    sleep(1)
+    try:
+        browser.find_element_by_css_selector(r'.rls-label').click()
+    except NoSuchElementException:
+        print("Episode not yet released")
+        continue
 
-        sleep(1)
-        try:
-            browser.find_element_by_css_selector(r'.rls-label').click()
-        except NoSuchElementException:
-            print("Episode not yet released")
-            continue
+    sleep(1)
+    try:
+        browser.find_element_by_css_selector(r'#\31 2-1080p > span:nth-child(2) > a:nth-child(1)').click()
+    except NoSuchElementException:
+        print("Episode not yet released")
+        continue
 
-        sleep(1)
-        try:
-            browser.find_element_by_css_selector(r'#\31 2-1080p > span:nth-child(2) > a:nth-child(1)').click()
-        except NoSuchElementException:
-            print("Episode not yet released")
-            continue
+    sleep(1)
+    pog.click(780, 522)
 
-        sleep(1)
-        pog.click(780, 522)
+    path = 'K:\\Videos\\' + link.text
+    if not os.path.exists(path):
+        os.mkdir(path)
 
-        path = 'K:\\Videos\\' + link.text
-        if not os.path.exists(path):
-            os.mkdir(path)
+    sleep(3)
+    pog.typewrite(path)
+    pog.press('enter')
+    sleep(5)
+    pog.press('enter')
 
-        sleep(3)
-        pog.typewrite(path)
-        pog.press('enter')
-        sleep(5)
-        pog.press('enter')
-
-        sleep(2)
-        pog.hotkey('alt', 'f4')
-        #break
+    sleep(2)
+    pog.hotkey('alt', 'f4')
+    #break
 
 browser.close()
 
