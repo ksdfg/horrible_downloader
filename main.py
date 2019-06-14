@@ -8,15 +8,13 @@ from bs4 import BeautifulSoup as bs
 import requests
 
 
-def getElem(xpath, elem):
+def waitForElem(xpath, elem):
     element_present = EC.presence_of_element_located((By.XPATH, xpath))
 
     try:
-        WebDriverWait(driver, 60).until(element_present)
+        WebDriverWait(driver, 10).until(element_present)
     except TimeoutException:
         print("problem in ", elem)
-
-    return driver.find_element_by_xpath(xpath)
 
 
 shows = ["Fruits Basket (2019)", "Senryuu Shoujo", "Midara na Ao-chan wa Benkyou ga Dekinai", "Hitoribocchi no "
@@ -33,11 +31,17 @@ for link in links:
     
     if link.text in shows:
         print(link.get("href"))
-        driver.get("https://horriblesubs.info/" + link.get("href"))
+        driver.get("https://horriblesubs.info" + link.get("href"))
 
-        getElem(r'/html/body/div[2]/div/div[2]/div[2]/div[1]/div/main/div['r'1]/article/div/div[4]/form/input', "search").send_keys("1"+Keys.ENTER)
+        waitForElem(r'/html/body/div[2]/div/div[2]/div[2]/div[1]/div/main/div['r'1]/article/div/div[4]/form/input', "search")
+        b = driver.find_element_by_xpath(r'/html/body/div[2]/div/div[2]/div[2]/div[1]/div/main/div['r'1]/article/div/div[4]/form/input')
+        b.send_keys("1"+Keys.ENTER)
 
-        getElem(r'/html/body/div[2]/div/div[2]/div[2]/div[1]/div/main/div[1]/article/div/div['r'4]/div[1]/div/a', "episode").click()
+        waitForElem(r'/html/body/div[2]/div/div[2]/div[2]/div[1]/div/main/div[1]/article/div/div['r'4]/div[1]/div/a', "episode")
+        b = driver.find_element_by_xpath(r'/html/body/div[2]/div/div[2]/div[2]/div[1]/div/main/div[1]/article/div/div['r'4]/div[1]/div/a')
+        b.click()
 
-        getElem(r'/html/body/div[2]/div/div[2]/div[2]/div[1]/div/main/div[1]/article/div/div['r'4]/div['r'1]/div/div'r'/div[3]/span[2]/a', "magnet").click()
+        waitForElem(r'/html/body/div[2]/div/div[2]/div[2]/div[1]/div/main/div[1]/article/div/div['r'4]/div['r'1]/div/div'r'/div[3]/span[2]/a', "magnet")
+        b = driver.find_element_by_xpath(r'/html/body/div[2]/div/div[2]/div[2]/div[1]/div/main/div[1]/article/div/div['r'4]/div['r'1]/div/div'r'/div[3]/span[2]/a')
+        b.click()
         #break
