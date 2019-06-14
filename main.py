@@ -11,31 +11,31 @@ soup = bs(requests.get("https://horriblesubs.info/").text, features='html.parser
 
 links = [i for i in soup.select('a[title = "See all releases for this show"]') if i.text in shows.keys()]
 
-browser = wbd.Firefox()
-browser.implicitly_wait(10)
+driver = wbd.Firefox()
+driver.implicitly_wait(10)
 
 for link in links:
 
     print("\n", link.text, sep="")
-    browser.get("https://horriblesubs.info" + link.get("href"))
+    driver.get("https://horriblesubs.info" + link.get("href"))
 
     ep = str(shows[link.text])
     if len(ep) == 1:
         ep = '0' + ep
 
-    browser.find_element_by_css_selector('#hs-search > input').send_keys(ep)
+    driver.find_element_by_css_selector('#hs-search > input').send_keys(ep)
     pog.press('enter')
 
     sleep(1)
     try:
-        browser.find_element_by_css_selector(r'.rls-label').click()
+        driver.find_element_by_css_selector(r'.rls-label').click()
     except NoSuchElementException:
         print("Episode not yet released")
         continue
 
     sleep(1)
     try:
-        browser.find_element_by_css_selector(r'#\3' + ep[0] + ' ' + ep[1:] + '-1080p > span:nth-child(2) > a:nth-child(1)').click()
+        driver.find_element_by_css_selector(r'#\3' + ep[0] + ' ' + ep[1:] + '-1080p > span:nth-child(2) > a:nth-child(1)').click()
     except NoSuchElementException:
         print("Episode not yet released")
         continue
@@ -57,9 +57,8 @@ for link in links:
 
     sleep(2)
     pog.hotkey('alt', 'f4')
-    #break
 
-browser.close()
+driver.close()
 
 f = open("currently_watching.py", "w")
 f.write("shows = " + str(shows).replace(", ", ",\n"))
