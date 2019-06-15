@@ -58,7 +58,6 @@ for link in links:
         print(pf['quality'] + " Magnet link of latest episode of  " + link.text + " is not available right now T-T")
         continue
 
-    # click on the okay button to open your torrent downloading software
     sleep(1)
     
     # define path where episode is to be downloaded
