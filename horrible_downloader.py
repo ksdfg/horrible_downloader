@@ -1,4 +1,3 @@
-from selenium import webdriver as wbd
 from selenium.common.exceptions import NoSuchElementException
 import pyautogui as pog
 from bs4 import BeautifulSoup as bs
@@ -7,6 +6,7 @@ from time import sleep
 import os
 from currently_watching import shows
 from user_preferences import preferences
+import horrible_functions as hf
 
 soup = bs(requests.get("https://horriblesubs.info/").text, features='html.parser')
 
@@ -15,7 +15,7 @@ if len(links) == 0:
     print("Nothing to download today T-T")
     exit(0)
 
-driver = wbd.Firefox(executable_path=preferences['driver_path'])
+driver = hf.drivers[preferences['browser']](executable_path=preferences['driver_path'])
 driver.implicitly_wait(10)
 
 for link in links:
@@ -32,14 +32,14 @@ for link in links:
 
     sleep(1)
     try:
-        driver.find_element_by_css_selector(r'.rls-label').click()
+        hf.link_selector(driver, ep, preferences['browser']).click()
     except NoSuchElementException:
         print("Episode not yet released")
         continue
 
     sleep(1)
     try:
-        driver.find_element_by_css_selector(r'#\3' + ep[0] + ' ' + ep[1:] + '-' + preferences['quality'] + ' > span:nth-child(2) > a:nth-child(1)').click()
+        hf.magnet_selector(driver, ep, preferences['quality'], preferences['browser']).click()
     except NoSuchElementException:
         print("Episode not yet released")
         continue
@@ -57,10 +57,10 @@ for link in links:
     sleep(5)
     pog.press('enter')
 
-    shows[link.text] += 1
-
     sleep(2)
     pog.hotkey('alt', 'f4')
+
+    shows[link.text] += 1
 
 driver.close()
 
