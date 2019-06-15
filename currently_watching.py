@@ -4,7 +4,6 @@
 # This means that I already have downloaded ep. 34 and need to download ep.35
 # Please ensure that the show's name is exactly the same as it appears in HorribleSubs' schedule
 
-
 shows = {'Fruits Basket (2019)': 12,
 'Senryuu Shoujo': 12,
 'Midara na Ao-chan wa Benkyou ga Dekinai': 12,
