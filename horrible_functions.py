@@ -1,7 +1,7 @@
 from selenium import webdriver as wbd
 from time import sleep
 import pyautogui as pog
-from user_preferences import preferences as pf
+from user_preferences import preferences
 
 
 drivers = {
@@ -32,12 +32,12 @@ def utorrent_download(path):
     pog.press('enter')
 
 
-def qbittorrent_download(i,path):
+def qbittorrent_download(i, path):
     sleep(3)
-    pog.click(*pf['clicks'][i])
+    pog.click(*preferences['clicks'][i])
     i += 1
     sleep(2)
-    pog.click(*pf['clicks'][i])
+    pog.click(*preferences['clicks'][i])
     i += 1
     pog.typewrite(path)     # enter path where you want to store the downloaded episode
     pog.press('enter')
@@ -45,6 +45,7 @@ def qbittorrent_download(i,path):
     pog.press('enter')
     pog.press('enter')
     sleep(2)
+
 
 torrents = {
     'utorrent': utorrent_download,

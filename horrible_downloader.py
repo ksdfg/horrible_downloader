@@ -6,7 +6,7 @@ from bs4 import BeautifulSoup as bs
 import requests
 from currently_watching import shows
 import horrible_functions as hf
-from user_preferences import preferences as pf
+from user_preferences import preferences
 
 soup = bs(requests.get("https://horriblesubs.info/").text, features='html.parser')
 
@@ -15,7 +15,7 @@ if len(links) == 0:
     print("Nothing to download today! T-T")
     exit(0)
 
-driver = hf.drivers[pf['browser']](pf['driver_path'])
+driver = hf.drivers[preferences['browser']](executable_path=preferences['driver_path'])
 driver.implicitly_wait(10)
 
 
@@ -29,23 +29,27 @@ for link in links:
     sleep(1)
 
     try:
-        hf.episode_selector(driver, ep, pf['browser']).click()
+        hf.episode_selector(driver, ep, preferences['browser']).click()
     except NoSuchElementException:
-        pog.hotkey('alt', '\t')
         print("New Episode of " + link.text + " has not yet released!!\n\n")
         continue
 
     sleep(1)
-    hf.magnet_selector(driver, ep, pf['quality'], pf['browser']).click()
+    try:
+        hf.magnet_selector(driver, ep, preferences['quality'], preferences['browser']).click()
+    except NoSuchElementException:
+        print("New Episode of " + link.text + " has not yet released!!\n\n")
+        continue
+
     sleep(1)
-    pog.click(*pf['clicks'][i])
-    i+=1
+    pog.click(*preferences['clicks'][i])
+    i += 1
     sleep(1)
-    path = pf['download_path'] + link.text
+    path = preferences['download_path'] + link.text
     if not os.path.exists(path):
         os.makedirs(path)
 
-    hf.torrents[pf['torrent']](i,path)
+    hf.torrents[preferences['torrent']](i, path)
 
     shows[link.text] += 1
 
