@@ -36,9 +36,6 @@ for link in links:
     # open the page in web driver
     driver.get("https://horriblesubs.info" + link.get("href"))
 
-    # scroll down a little to make elements more visible
-    pog.scroll(-20)
-
     # enter episode number in the search bar
     driver.find_element_by_css_selector('#hs-search > input').send_keys(ep)
     pog.press('enter')
@@ -51,9 +48,8 @@ for link in links:
         print("No Download link for required episode T-T")
         continue
 
-    sleep(1)
-
     # select which magnet link you want to open, and open it
+    sleep(2)
     try:
         hf.magnet_selector(driver, ep, preferences['quality'], preferences['browser']).click()
     except NoSuchElementException:  # thrown if no magnet link of required quality found
@@ -62,10 +58,7 @@ for link in links:
 
     # click on the okay button to open your torrent downloading software
     sleep(1)
-    pog.click(*preferences['clicks'][i])
-    i += 1
-
-    sleep(1)
+    pog.press(hf.torrent_opener[preferences['browser']])
 
     # define path where episode is to be downloaded
     path = preferences['download_path'] + link.text
@@ -73,7 +66,7 @@ for link in links:
         os.mkdir(path)  # if directory doesn't exist, make one
 
     # start downloading torrent from your preferred software
-    hf.torrents[preferences['torrent']](i, path)
+    hf.torrents[preferences['torrent']](path)
 
     # close torrent software so focus is switched to web driver again for next anime
     sleep(1)
