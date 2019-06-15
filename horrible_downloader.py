@@ -24,8 +24,6 @@ driver.implicitly_wait(10)  # make driver inherently wait for 10s after opening 
 # iterate for each link
 for link in links:
 
-    i = 0   # reset number of clicks - we start from number 0
-
     print("\n" + link.text)     # print name of anime you are checking
 
     # var that stores which episode you are trying to download
