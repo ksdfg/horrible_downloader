@@ -90,5 +90,5 @@ driver.close()  # once you have checked all animes in links, close the web drive
 
 # update the currently watching list
 f = open("currently_watching.py", "w")
-f.write("shows = " + str(shows).replace(", ", ",\n"))
+f.write(hf.cw_comment + "shows = " + str(shows).replace(", ", ",\n"))
 f.close()
