@@ -16,6 +16,6 @@ shows = {'Fruits Basket (2019)': 12,
 'Amazing Stranger': 12,
 'Joshikausei': 12,
 'Nobunaga-sensei no Osanazuma': 12,
-'Kimetsu no Yaiba': 11,
+'Kimetsu no Yaiba': 12,
 'Bokutachi wa Benkyou ga Dekinai': 11,
 'One Punch Man S2': 10}
