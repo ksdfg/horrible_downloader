@@ -12,5 +12,4 @@ shows = {'Fruits Basket (2019)': 12,
 'Nobunaga-sensei no Osanazuma': 11,
 'Kimetsu no Yaiba': 11,
 'Bokutachi wa Benkyou ga Dekinai': 11,
-'One Punch Man S2': 10,
-"JoJo's Bizarre Adventure - Golden Wind": 35}
+'One Punch Man S2': 10}
