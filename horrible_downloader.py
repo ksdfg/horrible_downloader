@@ -43,7 +43,7 @@ for link in links:
     try:
         hf.episode_selector(driver, ep, preferences['browser']).click()
     except NoSuchElementException:  # thrown if no results found
-        print("No Download link for required episode T-T")
+        print("No Download link for episode", ep, preferences['quality'], "T-T")
         continue
 
     # select which magnet link you want to open, and open it
@@ -51,7 +51,7 @@ for link in links:
     try:
         hf.magnet_selector(driver, ep, preferences['quality'], preferences['browser']).click()
     except NoSuchElementException:  # thrown if no magnet link of required quality found
-        print("No Download link for required episode T-T")
+        print("No Download link for episode", ep, preferences['quality'], "T-T")
         continue
 
     # click on the okay button to open your torrent downloading software
