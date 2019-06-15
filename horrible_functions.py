@@ -32,7 +32,7 @@ def magnet_selector(webdriver, ep, quality, browser):
 # dictionary to select what key presses are required to open torrent in downloading software
 torrent_opener = {
     'firefox': ['\t', '\t', '\t', '\t', 'enter'],
-    'chrome': []    # add your key presses here
+    'chrome': ['left', 'enter']    # add your key presses here
 }
 
 
