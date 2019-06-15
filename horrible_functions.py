@@ -30,7 +30,7 @@ def magnet_selector(webdriver, ep, quality, browser):
 
 
 # Function for when magnet link is opened in utorrent
-def utorrent_download(path):
+def utorrent_download(i, path):
     sleep(3)
     pog.typewrite(path)     # enter path where you want to store the downloaded episode
     pog.press('enter')
