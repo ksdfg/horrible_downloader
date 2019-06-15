@@ -80,6 +80,9 @@ for link in links:
     pog.hotkey('alt', 'f4')
     sleep(2)
 
+    # give confirmation message to user on terminal
+    print("Downloading episode", ep, "now :)")
+
     # next time try to download the next episode
     shows[link.text] += 1
 
