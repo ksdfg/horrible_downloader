@@ -29,8 +29,15 @@ def magnet_selector(webdriver, ep, quality, browser):
         return webdriver.find_element_by_xpath('//*[@id="' + ep + '-1080p"]/span[2]/a')
 
 
+# dictionary to select what key presses are required to open torrent in downloading software
+torrent_opener = {
+    'firefox': ['\t', '\t', '\t', '\t', 'enter'],
+    'chrome': []    # add your key presses here
+}
+
+
 # Function for when magnet link is opened in utorrent
-def utorrent_download(i, path):
+def utorrent_download(path):
     sleep(3)
     pog.typewrite(path)     # enter path where you want to store the downloaded episode
     pog.press('enter')
@@ -39,13 +46,11 @@ def utorrent_download(i, path):
 
 
 # Function for when magnet link is opened in qbittorrent
-def qbittorrent_download(i, path):
+def qbittorrent_download(path):
     sleep(3)
-    pog.click(*preferences['clicks'][i])
-    i += 1
+    pog.click(*preferences['clicks'][0])
     sleep(2)
-    pog.click(*preferences['clicks'][i])
-    i += 1
+    pog.click(*preferences['clicks'][1])
     pog.typewrite(path)     # enter path where you want to store the downloaded episode
     pog.press('enter')
     sleep(1)
