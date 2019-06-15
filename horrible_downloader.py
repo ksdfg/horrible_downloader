@@ -24,6 +24,8 @@ driver.implicitly_wait(10)  # make driver inherently wait for 10s after opening 
 # iterate for each link
 for link in links:
 
+    i = 0   # reset number of clicks - we start from number 0
+
     print("\n" + link.text)     # print name of anime you are checking
 
     # var that stores which episode you are trying to download
@@ -46,7 +48,7 @@ for link in links:
     try:
         hf.episode_selector(driver, ep, preferences['browser']).click()
     except NoSuchElementException:  # thrown if no results found
-        print("New Episode of " + link.text + " has not released yet T-T")
+        print("No Download link for required episode T-T")
         continue
 
     sleep(1)
@@ -55,11 +57,16 @@ for link in links:
     try:
         hf.magnet_selector(driver, ep, preferences['quality'], preferences['browser']).click()
     except NoSuchElementException:  # thrown if no magnet link of required quality found
-        print(pf['quality'] + " Magnet link of latest episode of  " + link.text + " is not available right now T-T")
+        print("No Download link for required episode T-T")
         continue
 
+    # click on the okay button to open your torrent downloading software
     sleep(1)
-    
+    pog.click(*preferences['clicks'][i])
+    i += 1
+
+    sleep(1)
+
     # define path where episode is to be downloaded
     path = preferences['download_path'] + link.text
     if not os.path.exists(path):
@@ -74,7 +81,7 @@ for link in links:
     sleep(2)
 
     # give confirmation message to user on terminal
-    print("Downloading episode ", ep, " of " + link.text + " now :)")
+    print("Downloading episode", ep, "now :)")
 
     # next time try to download the next episode
     shows[link.text] += 1
