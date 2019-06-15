@@ -51,11 +51,7 @@ for link in links:
     if not os.path.exists(path):
         os.mkdir(path)
 
-    sleep(3)
-    pog.typewrite(path)
-    pog.press('enter')
-    sleep(5)
-    pog.press('enter')
+    hf.torrents[preferences['torrent']](path)
 
     sleep(2)
     pog.hotkey('alt', 'f4')
