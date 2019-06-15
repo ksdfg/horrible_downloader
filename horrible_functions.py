@@ -30,7 +30,7 @@ def magnet_selector(webdriver, ep, quality, browser):
 
 
 # Function for when magnet link is opened in utorrent
-def utorrent_download(i, path):
+def utorrent_download(path):
     sleep(3)
     pog.typewrite(path)     # enter path where you want to store the downloaded episode
     pog.press('enter')
@@ -39,7 +39,8 @@ def utorrent_download(i, path):
 
 
 # Function for when magnet link is opened in qbittorrent
-def qbittorrent_download(i, path):
+def qbittorrent_download(path):
+    i = 0        # reset number of clicks - we start from number 0
     sleep(3)
     pog.click(*preferences['clicks'][i])
     i += 1
@@ -52,6 +53,17 @@ def qbittorrent_download(i, path):
     pog.press('enter')
     pog.press('enter')
     sleep(2)
+    
+    
+# Function for selecting to open your torrent downloading software from the browser alert
+def torrent_downloader(browser):
+    if browser == 'firefox':
+        pog.press('\t'*4)
+        pog.press('enter')
+        sleep(1)
+    elif browser == 'chrome':
+        pog.press(['left', 'enter'])
+        sleep(1)
 
 
 # dictionary to decide which function should be called to start torrent download
