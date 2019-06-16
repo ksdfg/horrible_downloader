@@ -1,4 +1,4 @@
-# This file basically has all the functions and variables that allow our system to be modular
+# This file basically has all the functions and dictionaries that allow our system to be modular
 # Which functions / variables are used depends on the user's preference settings
 
 from user_preferences import preferences
@@ -43,6 +43,10 @@ def utorrent_download(path):
     pog.press('enter')
     sleep(5)
     pog.press('enter')
+    # close torrent software so focus is switched to web driver again for next anime
+    sleep(1)
+    pog.hotkey('alt', 'f4')
+    sleep(2)
 
 
 # Function for when magnet link is opened in qbittorrent
@@ -64,9 +68,3 @@ torrents = {
     'utorrent': utorrent_download,
     'qbittorrent': qbittorrent_download
 }
-
-# the comment you have to write to currently watching.... this was dumb
-cw_comment = '# This is the list of shows you are currently watching this season\n# The syntax is "show\'s name": ' \
-             'next episode to be downloaded\n# e.g. : "JoJo\'s Bizarre Adventure - Golden Wind": 35\n# This means ' \
-             'that I already have downloaded ep. 34 and need to download ep.35\n# Please ensure that the show\'s name ' \
-             'is exactly the same as it appears in HorribleSubs\' schedule\n\n'
