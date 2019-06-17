@@ -2,11 +2,16 @@
 from currently_watching import shows
 from bs4 import BeautifulSoup as bs
 import requests
+import re
 
 # get a list of ALL currently airing shows
 curr_shows = list(map(lambda x: x.text, bs(requests.get("https://horriblesubs.info/release-schedule/").text,
                                            features='html.parser').select('a[title = "See all releases for this show"]')
                       ))
+# make sure iDOLM@STER doesn't get replaced by [email protected]
+for i in range(len(curr_shows)):
+    if re.search('[email protected]', curr_shows[i]):
+        curr_shows[i] = curr_shows[i].replace('[email protected]', 'iDOLM@STER')
 
 # interactive loop
 while True:
