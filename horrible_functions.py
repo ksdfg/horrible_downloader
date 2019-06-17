@@ -5,6 +5,10 @@ from user_preferences import preferences
 from selenium import webdriver as wbd
 from time import sleep
 import pyautogui as pog
+import requests
+import os
+import zipfile
+import io
 
 # Dictionary of web drivers according to browser
 drivers = {
@@ -67,4 +71,31 @@ def qbittorrent_download(path):
 torrents = {
     'utorrent': utorrent_download,
     'qbittorrent': qbittorrent_download
+}
+
+
+# function to download geckodriver during setup
+def geckodriver_download(driver_path):
+    print('Downloading web driver...')
+    # download file from github
+    win = '64' if 'PROGRAMFILES(X86)' in os.environ else '32'
+    r = requests.get('https://github.com/mozilla/geckodriver/releases/download/v0.24.0/geckodriver-v0.24.0-win' + win +
+                     '.zip', stream=True)
+    print('downloaded file from github')
+    # convert file to zip file
+    r = zipfile.ZipFile(io.BytesIO(r.content))
+    print('converted downloaded file into zip file')
+    # extract zip file at given path
+    r.extractall(driver_path)
+    print('extracted zip in given path')
+    # make driver path be path to driver.exe and return it
+    if driver_path[-1] == '\\':
+        return driver_path + 'geckodriver.exe'
+    else:
+        return driver_path + '\\geckodriver.exe'
+
+
+# dictionary that stores methods that download respective web driver
+download_driver = {
+    'firefox': geckodriver_download
 }
