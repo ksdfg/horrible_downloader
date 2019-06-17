@@ -2,21 +2,17 @@
 
 preferences = {
     # The browser that the user prefers to use
-    'browser': 'firefox',
+    'browser': '',
 
     # The path of the corresponding web driver (location where user has downloaded it)
-    'driver_path': r'C:\Users\ksdfg\AppData\Local\Programs\Python\Python37\Lib\site-packages\selenium\webdriver'
-                   r'\firefox\geckodriver.exe',
+    'driver_path': r'',
 
     # the torrent downloading software to be used
-    'torrent': 'utorrent',
+    'torrent': '',
 
     # path where all anime is to be downloaded
-    'download_path': 'K:\\Videos\\',
+    'download_path': '',
 
     # Quality in which user wants to download episode
-    'quality': '1080p',
-
-    # list of all coordinates where the program must click during operation
-    'clicks': []
+    'quality': ''
 }
