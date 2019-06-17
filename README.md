@@ -1,4 +1,4 @@
-# horrible_downloader
+# horrible downloader
 
 Automatically downloads all your seasonal anime
 

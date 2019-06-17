@@ -21,6 +21,11 @@ if len(links) == 0:
 driver = hf.drivers[preferences['browser']](executable_path=preferences['driver_path'])
 driver.implicitly_wait(10)  # make driver inherently wait for 10s after opening a page
 
+# read the contents of currently watching file
+f = open('currently_watching.py', 'r+')
+cw = f.read()
+f.close()
+
 # iterate for each link
 for link in links:
 
@@ -32,14 +37,14 @@ for link in links:
         ep = '0' + ep
 
     # open the page in web driver
-    driver.get("https://horriblesubs.info" + link.get("href"))
+    driver.get("https://horriblesubs.info" + link.get("href") + "/#" + str(shows[link.text]))
 
     # enter episode number in the search bar
     driver.find_element_by_css_selector('#hs-search > input').send_keys(ep)
     pog.press('enter')
-    sleep(1)
 
     # select which episode you want to download (from search results), and view download links
+    sleep(2)
     try:
         hf.episode_selector(driver, ep, preferences['browser']).click()
     except NoSuchElementException:  # thrown if no results found
@@ -66,20 +71,15 @@ for link in links:
     # start downloading torrent from your preferred software
     hf.torrents[preferences['torrent']](path)
 
-    # close torrent software so focus is switched to web driver again for next anime
-    sleep(1)
-    pog.hotkey('alt', 'f4')
-    sleep(2)
-
     # give confirmation message to user on terminal
     print("Downloading episode", ep, "now :)")
 
-    # next time try to download the next episode
-    shows[link.text] += 1
+    # next time try to download the next episode by updating currently watching
+    cw = cw.replace((link.text + '": ' + str(shows[link.text])), (link.text + '": ' + str(shows[link.text]+1)))
 
 driver.close()  # once you have checked all animes in links, close the web driver
 
 # update the currently watching list
 f = open("currently_watching.py", "w")
-f.write(hf.cw_comment + "shows = " + str(shows).replace(", ", ",\n"))
+f.write(cw)
 f.close()
