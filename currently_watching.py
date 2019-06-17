@@ -20,5 +20,5 @@ shows = {
     r"Kimetsu no Yaiba": 12,
     r"Bokutachi wa Benkyou ga Dekinai": 12,
     r"One Punch Man S2": 10,
-    r"RobiHachi": 11
+    r"RobiHachi": 10
 }

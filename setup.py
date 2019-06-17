@@ -22,16 +22,8 @@ while True:
     else:
         print('Invalid response. Please check your answer is one of the provided options and try again')
 
-# Take input of driver_path
-while True:
-    driver_path = input('\nEnter path of download location of web driver : ')
-    if os.path.exists(driver_path):
-        break
-    else:
-        print('Invalid path. Please make sure the folder actually exists and try again')
-
 # installing web driver
-driver_path = hf.download_driver[browser](driver_path)
+driver_path = hf.download_driver[browser]()
 
 # Take input of torrent downloading software used
 while True:
@@ -61,3 +53,17 @@ while True:
         break
     else:
         print('Invalid response. Please make sure your answer is one of the three options given and try again')
+
+f = open('user_preferences.py', 'r')
+pref = f.read()
+f.close()
+
+pref = re.sub("browser': '.+'", "browser': '"+browser+"'", pref)
+pref = re.sub("driver_path': r'.+'", "driver_path': r'"+driver_path.replace("\\", "\\\\")+"'", pref)
+pref = re.sub("torrent': '.+'", "torrent': '"+torrent+"'", pref)
+pref = re.sub("download_path': '.+'", "download_path': '"+download_path.replace("\\", "\\\\\\\\")+"\\\\\\\\'", pref)
+pref = re.sub("quality': '.+'", "quality': '"+quality+"'", pref)
+
+f = open('user_preferences.py', 'w')
+f.write(pref)
+f.close()

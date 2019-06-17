@@ -70,24 +70,19 @@ torrents = {
 
 
 # function to download geckodriver during setup
-def geckodriver_download(driver_path):
+def geckodriver_download():
+    driver_path = os.path.join('C:', 'Users', os.getlogin(), 'AppData', 'Local', 'Programs', 'Python', 'Python37',
+                               'Lib', 'site-packages', 'selenium', 'webdriver', 'firefox')
     print('Downloading web driver...')
     # download file from github
     win = '64' if 'PROGRAMFILES(X86)' in os.environ else '32'
     r = requests.get('https://github.com/mozilla/geckodriver/releases/download/v0.24.0/geckodriver-v0.24.0-win' + win +
                      '.zip', stream=True)
-    print('downloaded file from github')
-    # convert file to zip file
-    r = zipfile.ZipFile(io.BytesIO(r.content))
-    print('converted downloaded file into zip file')
-    # extract zip file at given path
-    r.extractall(driver_path)
-    print('extracted zip in given path')
-    # make driver path be path to driver.exe and return it
-    if driver_path[-1] == '\\':
-        return driver_path + 'geckodriver.exe'
-    else:
-        return driver_path + '\\geckodriver.exe'
+    print('Downloaded zip file from the internet.\nExtracting zip file...')
+    r = zipfile.ZipFile(io.BytesIO(r.content))  # convert file to zip file
+    r.extractall(driver_path)   # extract zip file at given path
+    print('extracted zip file.')
+    return driver_path + '\\geckodriver.exe'    # make driver path be path to driver.exe and return it
 
 
 # dictionary that stores methods that download respective web driver
