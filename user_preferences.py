@@ -11,7 +11,7 @@ preferences = {
     'torrent': ' ',
 
     # path where all anime is to be downloaded
-    'download_path': ' ',
+    'download_path': r' ',
 
     # Quality in which user wants to download episode
     'quality': ' '
