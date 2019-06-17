@@ -71,7 +71,8 @@ torrents = {
 
 # function to download geckodriver during setup
 def geckodriver_download():
-    driver_path = r'C:\Users\ksdfg\AppData\Local\Programs\Python\Python37\Lib\site-packages\selenium\webdriver\firefox'
+    driver_path = os.path.join('C:', 'Users', os.getlogin(), 'AppData', 'Local', 'Programs', 'Python', 'Python37',
+                               'Lib', 'site-packages', 'selenium', 'webdriver', 'firefox')
     print('Downloading web driver...')
     # download file from github
     win = '64' if 'PROGRAMFILES(X86)' in os.environ else '32'
