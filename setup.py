@@ -1,10 +1,8 @@
 # file to be run to setup horrible downloader
 from pip._internal import main as pipmain
 import re
-import requests
 import os
-import zipfile
-import io
+import horrible_functions as hf
 
 # install selenium if not already installed
 pipmain(['install', 'selenium'])
@@ -25,29 +23,15 @@ while True:
         print('Invalid response. Please check your answer is one of the provided options and try again')
 
 # Take input of driver_path
-driver_path = input('\nEnter path of download location of web driver : ')
+while True:
+    driver_path = input('\nEnter path of download location of web driver : ')
+    if os.path.exists(driver_path):
+        break
+    else:
+        print('Invalid path. Please make sure the folder actually exists and try again')
 
-# installing web driver -
-# will make the entire thing modular when I know what I need to do to download chromedriver
-print('Downloading web driver...')
-# download file from github
-win = '64' if 'PROGRAMFILES(X86)' in os.environ else '32'
-r = requests.get('https://github.com/mozilla/geckodriver/releases/download/v0.24.0/geckodriver-v0.24.0-win' + win +
-                 '.zip', stream=True)
-print('downloaded file from github')
-# convert file to zip file
-r = zipfile.ZipFile(io.BytesIO(r.content))
-print('converted downloaded file into zip file')
-# extract zip file at given path
-r.extractall(driver_path)
-print('extracted zip in given path')
-
-# make driver path be path to driver.exe -
-# will make the entire thing modular when I know what I need to do to download chromedriver
-if driver_path[-1] == '\\':
-    driver_path += 'geckodriver.exe'
-else:
-    driver_path += '\\geckodriver.exe'
+# installing web driver
+driver_path = hf.download_driver[browser](driver_path)
 
 # Take input of torrent downloading software used
 while True:
