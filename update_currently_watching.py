@@ -2,7 +2,6 @@
 from currently_watching import shows
 from bs4 import BeautifulSoup as bs
 import requests
-import re
 
 # get a list of ALL currently airing shows
 # make sure iDOLM@STER doesn't get replaced by [email protected]
