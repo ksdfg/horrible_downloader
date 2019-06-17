@@ -1,11 +1,21 @@
 # file to be run to setup horrible downloader
+import requests
 from pip._internal import main as pipmain
 import re
 import os
 import horrible_functions as hf
+import zipfile
+import io
 
-# install selenium if not already installed
+# install required apis and modules if not already installed
 pipmain(['install', 'selenium'])
+print('\n')
+pipmain(['install', 'pyautogui'])
+print('\n')
+pipmain(['install', 'beautifulsoup4'])
+print('\n')
+pipmain(['install', 'requests'])
+print('\n')
 
 # take input of what browser to use
 while True:
@@ -23,7 +33,17 @@ while True:
         print('Invalid response. Please check your answer is one of the provided options and try again')
 
 # installing web driver
-driver_path = hf.download_driver[browser]()
+driver_path = os.path.join('C:\\', 'Users', os.getlogin(), 'AppData', 'Local', 'Programs', 'Python', 'Python37',
+                           'Lib', 'site-packages', 'selenium', 'webdriver', browser)
+print('Downloading web driver...')
+# download file from github
+win = '64' if 'PROGRAMFILES(X86)' in os.environ else '32'
+r = requests.get(hf.download_driver[browser][0] + (win if browser=='firefox' else '') + '.zip', stream=True)
+print('Downloaded zip file from the internet.\nExtracting zip file...')
+r = zipfile.ZipFile(io.BytesIO(r.content))  # convert file to zip file
+r.extractall(driver_path)   # extract zip file at given path
+print('extracted zip file.')
+driver_path += '\\' + hf.download_driver[browser][1] + '.exe'    # make driver path be path to driver.exe and return it
 
 # Take input of torrent downloading software used
 while True:

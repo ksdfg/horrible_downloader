@@ -5,10 +5,7 @@ from collections import defaultdict as dd
 from selenium import webdriver as wbd
 from time import sleep
 import pyautogui as pog
-import requests
 import os
-import zipfile
-import io
 
 # Dictionary of web drivers according to browser
 drivers = {
@@ -28,7 +25,8 @@ def episode_selector(webdriver, ep, browser):
 # A funtion that returns the element which, when clicked, opens magnet link
 def magnet_selector(webdriver, ep, quality, browser):
     if browser == 'firefox':
-        return webdriver.find_element_by_css_selector(r'#\3' + ep[0] + ' ' + ep[1:] + '-' + quality + '> span:nth-child(2) > ''a:nth-child(1)')
+        return webdriver.find_element_by_css_selector(r'#\3' + ep[0] + ' ' + ep[1:] + '-' + quality +
+                                                      '> span:nth-child(2) > ''a:nth-child(1)')
     elif browser == 'chrome':
         return webdriver.find_element_by_xpath('//*[@id="' + ep + '-1080p"]/span[2]/a')
 
@@ -68,32 +66,17 @@ torrents = {
     'qbittorrent': qbittorrent_download
 }
 
-
-# function to download geckodriver during setup
-def geckodriver_download():
-    driver_path = os.path.join('C:\\', 'Users', os.getlogin(), 'AppData', 'Local', 'Programs', 'Python', 'Python37',
-                               'Lib', 'site-packages', 'selenium', 'webdriver', 'firefox')
-    print('Downloading web driver...')
-    # download file from github
-    win = '64' if 'PROGRAMFILES(X86)' in os.environ else '32'
-    r = requests.get('https://github.com/mozilla/geckodriver/releases/download/v0.24.0/geckodriver-v0.24.0-win' + win +
-                     '.zip', stream=True)
-    print('Downloaded zip file from the internet.\nExtracting zip file...')
-    r = zipfile.ZipFile(io.BytesIO(r.content))  # convert file to zip file
-    r.extractall(driver_path)   # extract zip file at given path
-    print('extracted zip file.')
-    return driver_path + '\\geckodriver.exe'    # make driver path be path to driver.exe and return it
-
-
-# dictionary that stores methods that download respective web driver
+# dictionary that stores urls that download respective web driver and names of web drivers
 download_driver = {
-    'firefox': geckodriver_download
+    'firefox': ['https://github.com/mozilla/geckodriver/releases/download/v0.24.0/geckodriver-v0.24.0-win',
+                'geckodriver'],
+    'chrome': ['https://chromedriver.storage.googleapis.com/73.0.3683.68/chromedriver_win32', 'chromedriver']
 }
 
 
 # function to startup qbittorrent in the beginning
 def qbittorrent_startup():
-    os.startfile("C:\Program Files\qBittorrent\qbittorrent.exe")
+    os.startfile(r"C:\Program Files\qBittorrent\qbittorrent.exe")
     sleep(5)
     pog.hotkey('alt', 'f4')
 
@@ -101,4 +84,3 @@ def qbittorrent_startup():
 # default dictionary that returns the startup functions of torrenting softwares
 torrent_startup = dd(lambda: lambda: None)
 torrent_startup['qbittorrent'] = qbittorrent_startup
-
