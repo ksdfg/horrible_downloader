@@ -67,9 +67,9 @@ while True:
 
 # Take input of Quality in which user wants to download episode
 while True:
-    quality = input('\nYou can download episodes in 1080p, 720p or 360p.'
+    quality = input('\nYou can download episodes in 1080p, 720p or 480p.'
                     '\nChoose what quality you want to download your anime in : ')
-    if quality in ['1080p', '720p', '360p']:
+    if quality in ['1080p', '720p', '480p']:
         break
     else:
         print('Invalid response. Please make sure your answer is one of the three options given and try again')
