@@ -4,8 +4,10 @@ from bs4 import BeautifulSoup as bs
 import requests
 
 # get a list of ALL currently airing shows
-curr_shows = list(map(lambda x: x.text, bs(requests.get("https://horriblesubs.info/release-schedule/").text,
-                                           features='html.parser').select('a[title = "See all releases for this show"]')
+# make sure iDOLM@STER doesn't get replaced by [email protected]
+curr_shows = list(map(lambda x: x.text.replace('[email protected]', 'iDOLM@STER'),
+                      bs(requests.get("https://horriblesubs.info/release-schedule/").text,
+                         features='html.parser').select('a[title = "See all releases for this show"]')
                       ))
 
 # interactive loop
