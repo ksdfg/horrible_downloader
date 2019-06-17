@@ -1,10 +1,14 @@
-# This file basically has all the functions and variables that allow our system to be modular
+# This file basically has all the functions and dictionaries that allow our system to be modular
 # Which functions / variables are used depends on the user's preference settings
 
 from user_preferences import preferences
 from selenium import webdriver as wbd
 from time import sleep
 import pyautogui as pog
+import requests
+import os
+import zipfile
+import io
 
 # Dictionary of web drivers according to browser
 drivers = {
@@ -29,6 +33,13 @@ def magnet_selector(webdriver, ep, quality, browser):
         return webdriver.find_element_by_xpath('//*[@id="' + ep + '-1080p"]/span[2]/a')
 
 
+# dictionary to select what key presses are required to open torrent in downloading software
+torrent_opener = {
+    'firefox': ['\t', '\t', '\t', '\t', 'enter'],
+    'chrome': ['left', 'enter']
+}
+
+
 # Function for when magnet link is opened in utorrent
 def utorrent_download(path):
     sleep(3)
@@ -36,34 +47,24 @@ def utorrent_download(path):
     pog.press('enter')
     sleep(5)
     pog.press('enter')
+    # close torrent software so focus is switched to web driver again for next anime
+    sleep(1)
+    pog.hotkey('alt', 'f4')
+    sleep(2)
 
 
 # Function for when magnet link is opened in qbittorrent
 def qbittorrent_download(path):
-    i = 0        # reset number of clicks - we start from number 0
     sleep(3)
-    pog.click(*preferences['clicks'][i])
-    i += 1
+    pog.click(*preferences['clicks'][0])
     sleep(2)
-    pog.click(*preferences['clicks'][i])
-    i += 1
+    pog.click(*preferences['clicks'][1])
     pog.typewrite(path)     # enter path where you want to store the downloaded episode
     pog.press('enter')
     sleep(1)
     pog.press('enter')
     pog.press('enter')
     sleep(2)
-    
-    
-# Function for selecting to open your torrent downloading software from the browser alert
-def torrent_downloader(browser):
-    if browser == 'firefox':
-        pog.press('\t'*4)
-        pog.press('enter')
-        sleep(1)
-    elif browser == 'chrome':
-        pog.press(['left', 'enter'])
-        sleep(1)
 
 
 # dictionary to decide which function should be called to start torrent download
@@ -72,8 +73,29 @@ torrents = {
     'qbittorrent': qbittorrent_download
 }
 
-# the comment you have to write to currently watching.... this was dumb
-cw_comment = '# This is the list of shows you are currently watching this season\n# The syntax is "show\'s name": ' \
-             'next episode to be downloaded\n# e.g. : "JoJo\'s Bizarre Adventure - Golden Wind": 35\n# This means ' \
-             'that I already have downloaded ep. 34 and need to download ep.35\n# Please ensure that the show\'s name ' \
-             'is exactly the same as it appears in HorribleSubs\' schedule\n\n'
+
+# function to download geckodriver during setup
+def geckodriver_download(driver_path):
+    print('Downloading web driver...')
+    # download file from github
+    win = '64' if 'PROGRAMFILES(X86)' in os.environ else '32'
+    r = requests.get('https://github.com/mozilla/geckodriver/releases/download/v0.24.0/geckodriver-v0.24.0-win' + win +
+                     '.zip', stream=True)
+    print('downloaded file from github')
+    # convert file to zip file
+    r = zipfile.ZipFile(io.BytesIO(r.content))
+    print('converted downloaded file into zip file')
+    # extract zip file at given path
+    r.extractall(driver_path)
+    print('extracted zip in given path')
+    # make driver path be path to driver.exe and return it
+    if driver_path[-1] == '\\':
+        return driver_path + 'geckodriver.exe'
+    else:
+        return driver_path + '\\geckodriver.exe'
+
+
+# dictionary that stores methods that download respective web driver
+download_driver = {
+    'firefox': geckodriver_download
+}
