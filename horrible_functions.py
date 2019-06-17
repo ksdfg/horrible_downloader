@@ -17,7 +17,7 @@ drivers = {
 # A function that returns the element which, when clicked, brings links of episode to be downloaded in view
 def episode_selector(webdriver, ep, browser):
     if browser == 'firefox':
-        return webdriver.find_element_by_css_selector(r'.rls-label')
+        return webdriver.find_element_by_css_selector(r'#\3' + ep[0] + ' ' + ep[1:] + ' > a:nth-child(1)')
     elif browser == 'chrome':
         return webdriver.find_element_by_xpath('//*[@id="' + ep + '"]/a')
 
@@ -43,10 +43,8 @@ def utorrent_download(path):
     sleep(3)
     pog.typewrite(path)     # enter path where you want to store the downloaded episode
     pog.press('enter')
-    sleep(5)
     pog.press('enter')
     # close torrent software so focus is switched to web driver again for next anime
-    sleep(1)
     pog.hotkey('alt', 'f4')
     sleep(2)
 
