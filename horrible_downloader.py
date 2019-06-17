@@ -17,6 +17,9 @@ if len(links) == 0:
     print("Nothing to download today T-T")
     exit(0)
 
+# startup procedure for torrent software
+hf.torrent_startup[preferences['torrent']]()
+
 # open a web driver according to browser preference
 driver = hf.drivers[preferences['browser']](executable_path=preferences['driver_path'])
 driver.implicitly_wait(10)  # make driver inherently wait for 10s after opening a page

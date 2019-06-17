@@ -1,7 +1,7 @@
 # This file basically has all the functions and dictionaries that allow our system to be modular
 # Which functions / variables are used depends on the user's preference settings
 
-from user_preferences import preferences
+from collections import defaultdict as dd
 from selenium import webdriver as wbd
 from time import sleep
 import pyautogui as pog
@@ -56,14 +56,9 @@ def utorrent_download(path):
 # Function for when magnet link is opened in qbittorrent
 def qbittorrent_download(path):
     sleep(3)
-    pog.click(*preferences['clicks'][0])
-    sleep(2)
-    pog.click(*preferences['clicks'][1])
+    pog.press(['\t', '\t', 'up', '\t', '\t'])
     pog.typewrite(path)     # enter path where you want to store the downloaded episode
-    pog.press('enter')
-    sleep(1)
-    pog.press('enter')
-    pog.press('enter')
+    pog.press(['\t', '\t', '\t', '\t', '\t', '\t', '\t', '\t', '\t', '\t', 'space', 'enter'])
     sleep(2)
 
 
@@ -93,3 +88,16 @@ def geckodriver_download():
 download_driver = {
     'firefox': geckodriver_download
 }
+
+
+# function to startup qbittorrent in the beginning
+def qbittorrent_startup():
+    os.startfile("C:\Program Files\qBittorrent\qbittorrent.exe")
+    sleep(5)
+    pog.hotkey('alt', 'f4')
+
+
+# default dictionary that returns the startup functions of torrenting softwares
+torrent_startup = dd(lambda: lambda: None)
+torrent_startup['qbittorrent'] = qbittorrent_startup
+
