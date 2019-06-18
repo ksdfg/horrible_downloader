@@ -1,5 +1,5 @@
 # python script to update your currently watching list
-from currently_watching import shows
+from horriblefiles.currently_watching import shows
 from bs4 import BeautifulSoup as bs
 import requests
 import re
@@ -45,7 +45,7 @@ while True:
             continue
 
         # read the contents of currently watching file
-        f = open('currently_watching.py', 'r')
+        f = open('horriblefiles/currently_watching.py', 'r')
         cw = f.read()
         f.close()
 
@@ -54,7 +54,7 @@ while True:
         shows[name] = int(ep)
 
         # update the currently watching list
-        f = open("currently_watching.py", "w")
+        f = open("horriblefiles/currently_watching.py", "w")
         f.write(cw)
         f.close()
 
@@ -65,7 +65,7 @@ while True:
 
         try:
             # read the contents of currently watching file
-            f = open('currently_watching.py', 'r')
+            f = open('horriblefiles/currently_watching.py', 'r')
             cw = f.read()
             f.close()
 
@@ -77,7 +77,7 @@ while True:
             del shows[name]
 
             # update the currently watching list
-            f = open("currently_watching.py", "w")
+            f = open("horriblefiles/currently_watching.py", "w")
             f.write(cw)
             f.close()
 
@@ -100,7 +100,7 @@ while True:
             continue
 
         # read the contents of currently watching file
-        f = open('currently_watching.py', 'r')
+        f = open('horriblefiles/currently_watching.py', 'r')
         cw = f.read()
         f.close()
 
@@ -111,7 +111,7 @@ while True:
         cw = re.sub(pattern_name + '": \d+', name + '": ' + ep, cw)
 
         # update the currently watching list
-        f = open("currently_watching.py", "w")
+        f = open("horriblefiles/currently_watching.py", "w")
         f.write(cw)
         f.close()
 

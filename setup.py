@@ -14,7 +14,7 @@ print('\n')
 
 import requests
 import re
-import horrible_functions as hf
+import horriblefiles.horrible_functions as hf
 import zipfile
 import io
 
@@ -75,7 +75,7 @@ while True:
     else:
         print('Invalid response. Please make sure your answer is one of the three options given and try again')
 
-f = open('user_preferences.py', 'r')
+f = open('horriblefiles/user_preferences.py', 'r')
 pref = f.read()
 f.close()
 
@@ -85,7 +85,7 @@ pref = re.sub("torrent': '.+'", "torrent': '"+torrent+"'", pref)
 pref = re.sub("download_path': '.+'", "download_path': '"+download_path.replace("\\", "\\\\\\\\")+"\\\\\\\\'", pref)
 pref = re.sub("quality': '.+'", "quality': '"+quality+"'", pref)
 
-f = open('user_preferences.py', 'w')
+f = open('horriblefiles/user_preferences.py', 'w')
 f.write(pref)
 f.close()
 
