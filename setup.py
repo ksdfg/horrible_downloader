@@ -91,4 +91,4 @@ f.close()
 
 # Make your currently watching list
 print("\nWe're done installing the basic softwares! Now let's make a list of anime you are watching this season :)\n")
-import update_currently_watching
+import anime_list
