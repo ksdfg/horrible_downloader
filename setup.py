@@ -1,16 +1,9 @@
 # file to be run to setup horrible downloader
-from pip._internal import main as pipmain
 import os
 
-# install required modules if not already installed
-pipmain(['install', 'selenium'])
-print('\n')
-pipmain(['install', 'pyautogui'])
-print('\n')
-pipmain(['install', 'beautifulsoup4'])
-print('\n')
-pipmain(['install', 'requests'])
-print('\n')
+#install required modules
+os.system('pip install -r horriblefiles\\requirements.txt')
+os.system('cls')
 
 import requests
 import re
@@ -20,7 +13,7 @@ import io
 
 # take input of what browser to use
 while True:
-    browser = input('\nhorrible downloader right now supports two browsers - Mozilla Firefox and Google Chrome.'
+    browser = input('horrible downloader right now supports two browsers - Mozilla Firefox and Google Chrome.'
                     '\nWe require you to choose which one horrible downloader will use.'
                     '\nBrowser : ').lower()
     # select correct browser according to user input
@@ -89,6 +82,9 @@ f = open('horriblefiles/user_preferences.py', 'w')
 f.write(pref)
 f.close()
 
+# clear the terminal
+os.system('cls')
+
 # Make your currently watching list
-print("\nWe're done installing the basic softwares! Now let's make a list of anime you are watching this season :)\n")
+print("We're done installing the basic softwares! Now let's make a list of anime you are watching this season :)")
 import update_anime

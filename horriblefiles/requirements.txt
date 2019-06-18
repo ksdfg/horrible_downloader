@@ -1,0 +1,4 @@
+selenium
+beautifulsoup4
+pyautogui
+requests
