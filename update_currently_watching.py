@@ -2,6 +2,7 @@
 from currently_watching import shows
 from bs4 import BeautifulSoup as bs
 import requests
+import re
 
 # get a list of ALL currently airing shows
 # make sure iDOLM@STER doesn't get replaced by [email protected]
@@ -33,29 +34,54 @@ while True:
 
         elif name in shows.keys():
             print('You are already watching this show!')
+            continue
 
-        else:
-            ep = input('Which episode to download next time you run horrible downloader? ')
-            # check if input is valid
-            if not ep.isdecimal() or int(ep) < 1:
-                print('This is not a valid episode number.')
-                continue
+        ep = input('Which episode to download next time you run horrible downloader? ')
+        # check if input is valid
+        if not ep.isdecimal() or int(ep) < 1:
+            print('This is not a valid episode number.')
+            continue
 
+        # read the contents of currently watching file
+        f = open('currently_watching.py', 'r')
+        cw = f.read()
+        f.close()
+
+        # add show to list
+        cw = cw.replace('{', '{\n\tr"' + name + '": ' + ep + (',' if len(shows) != 0 else ''))
+        shows[name] = int(ep)
+
+        # update the currently watching list
+        f = open("currently_watching.py", "w")
+        f.write(cw)
+        f.close()
+
+    elif choice == '2':
+        name = input('\nEnter name of anime as written in the schedule of horriblesubs.info'
+                     '\nLink to schedule - https://horriblesubs.info/release-schedule/'
+                     '\nName : ')
+
+        try:
             # read the contents of currently watching file
-            f = open('currently_watching.py', 'r+')
+            f = open('currently_watching.py', 'r')
             cw = f.read()
             f.close()
 
-            # add show to list
-            cw = cw.replace('{', '{\n\tr"' + name + '": ' + ep + (',' if len(shows) != 0 else ''))
-            shows[name] = int(ep)
+            # remove show from list
+            special_chars = ['+', '*', '.', '|', '(', ')', '$', '{', '}', '[', ']']     #set of all special chars in patterns
+            pattern_name = name     # copy of name to be used in the pattern
+            for i in special_chars:
+                pattern_name = pattern_name.replace(i, '\\'+i)      # add \ to escape special sequence
+            cw = re.sub('\n.+"' + pattern_name + '".+\n', '\n', cw)
+            del shows[name]
 
             # update the currently watching list
             f = open("currently_watching.py", "w")
             f.write(cw)
             f.close()
 
-            continue
+        except KeyError:
+            print('This anime cannot be found in your currently watching list T-T')
 
     else:
         print('Invalid option. Please try again.')
