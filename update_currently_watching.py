@@ -11,6 +11,8 @@ curr_shows = list(map(lambda x: x.text.replace('[email protected]', 'iDOLM@STER
                          features='html.parser').select('a[title = "See all releases for this show"]')
                       ))
 
+special_chars = ['+', '*', '.', '|', '(', ')', '$', '{', '}', '[', ']']  # set of all special chars in patterns
+
 # interactive loop
 while True:
     print('\n1. Add anime to currently watching list\t(type 1 to select this)'
@@ -68,7 +70,6 @@ while True:
             f.close()
 
             # remove show from list
-            special_chars = ['+', '*', '.', '|', '(', ')', '$', '{', '}', '[', ']']     #set of all special chars in patterns
             pattern_name = name     # copy of name to be used in the pattern
             for i in special_chars:
                 pattern_name = pattern_name.replace(i, '\\'+i)      # add \ to escape special sequence
@@ -82,6 +83,37 @@ while True:
 
         except KeyError:
             print('This anime cannot be found in your currently watching list T-T')
+
+    elif choice == '3':
+        name = input('\nEnter name of anime as written in the schedule of horriblesubs.info'
+                     '\nLink to schedule - https://horriblesubs.info/release-schedule/'
+                     '\nName : ')
+
+        if name not in shows.keys():
+            print('This anime cannot be found in your currently watching list T-T')
+            continue
+
+        ep = input('Which episode to download next time you run horrible downloader? ')
+        # check if input is valid
+        if not ep.isdecimal() or int(ep) < 1:
+            print('This is not a valid episode number.')
+            continue
+
+        # read the contents of currently watching file
+        f = open('currently_watching.py', 'r')
+        cw = f.read()
+        f.close()
+
+        # update show in list
+        pattern_name = name     # copy of name to be used in the pattern
+        for i in special_chars:
+            pattern_name = pattern_name.replace(i, '\\'+i)      # add \ to escape special sequence
+        cw = re.sub(pattern_name + '": \d+', name + '": ' + ep, cw)
+
+        # update the currently watching list
+        f = open("currently_watching.py", "w")
+        f.write(cw)
+        f.close()
 
     else:
         print('Invalid option. Please try again.')
