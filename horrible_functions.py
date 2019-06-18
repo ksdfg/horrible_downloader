@@ -13,24 +13,6 @@ drivers = {
     'chrome': wbd.Chrome
 }
 
-
-# A function that returns the element which, when clicked, brings links of episode to be downloaded in view
-def episode_selector(webdriver, ep, browser):
-    if browser == 'firefox':
-        return webdriver.find_element_by_css_selector(r'#\3' + ep[0] + ' ' + ep[1:] + ' > a:nth-child(1)')
-    elif browser == 'chrome':
-        return webdriver.find_element_by_xpath('//*[@id="' + ep + '"]/a')
-
-
-# A funtion that returns the element which, when clicked, opens magnet link
-def magnet_selector(webdriver, ep, quality, browser):
-    if browser == 'firefox':
-        return webdriver.find_element_by_css_selector(r'#\3' + ep[0] + ' ' + ep[1:] + '-' + quality +
-                                                      '> span:nth-child(2) > ''a:nth-child(1)')
-    elif browser == 'chrome':
-        return webdriver.find_element_by_xpath('//*[@id="' + ep + '-1080p"]/span[2]/a')
-
-
 # dictionary to select what key presses are required to open torrent in downloading software
 torrent_opener = {
     'firefox': ['\t', '\t', '\t', '\t', 'enter'],
