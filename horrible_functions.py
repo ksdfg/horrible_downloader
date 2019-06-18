@@ -68,7 +68,7 @@ torrents = {
 download_driver = {
     'firefox': ['https://github.com/mozilla/geckodriver/releases/download/v0.24.0/geckodriver-v0.24.0-win',
                 'geckodriver'],
-    'chrome': ['https://chromedriver.storage.googleapis.com/73.0.3683.68/chromedriver_win32', 'chromedriver']
+    'chrome': ['https://chromedriver.storage.googleapis.com/74.0.3729.6/chromedriver_win32', 'chromedriver']
 }
 
 
