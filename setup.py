@@ -1,13 +1,8 @@
 # file to be run to setup horrible downloader
-import requests
 from pip._internal import main as pipmain
-import re
 import os
-import horrible_functions as hf
-import zipfile
-import io
 
-# install required apis and modules if not already installed
+# install required modules if not already installed
 pipmain(['install', 'selenium'])
 print('\n')
 pipmain(['install', 'pyautogui'])
@@ -16,6 +11,12 @@ pipmain(['install', 'beautifulsoup4'])
 print('\n')
 pipmain(['install', 'requests'])
 print('\n')
+
+import requests
+import re
+import horriblefiles.horrible_functions as hf
+import zipfile
+import io
 
 # take input of what browser to use
 while True:
@@ -74,7 +75,7 @@ while True:
     else:
         print('Invalid response. Please make sure your answer is one of the three options given and try again')
 
-f = open('user_preferences.py', 'r')
+f = open('horriblefiles/user_preferences.py', 'r')
 pref = f.read()
 f.close()
 
@@ -84,6 +85,10 @@ pref = re.sub("torrent': '.+'", "torrent': '"+torrent+"'", pref)
 pref = re.sub("download_path': '.+'", "download_path': '"+download_path.replace("\\", "\\\\\\\\")+"\\\\\\\\'", pref)
 pref = re.sub("quality': '.+'", "quality': '"+quality+"'", pref)
 
-f = open('user_preferences.py', 'w')
+f = open('horriblefiles/user_preferences.py', 'w')
 f.write(pref)
 f.close()
+
+# Make your currently watching list
+print("\nWe're done installing the basic softwares! Now let's make a list of anime you are watching this season :)\n")
+import anime_list

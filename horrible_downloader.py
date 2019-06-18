@@ -4,9 +4,9 @@ import pyautogui as pog
 from selenium.common.exceptions import NoSuchElementException
 from bs4 import BeautifulSoup as bs
 import requests
-from currently_watching import shows
-import horrible_functions as hf
-from user_preferences import preferences
+from horriblefiles.currently_watching import shows
+import horriblefiles.horrible_functions as hf
+from horriblefiles.user_preferences import preferences
 
 # parse html source of horriblesubs homepage
 soup = bs(requests.get("https://horriblesubs.info/").text, features='html.parser')
@@ -25,7 +25,7 @@ driver = hf.drivers[preferences['browser']](executable_path=preferences['driver_
 driver.implicitly_wait(10)  # make driver inherently wait for 10s after opening a page
 
 # read the contents of currently watching file
-f = open('currently_watching.py', 'r+')
+f = open('horriblefiles/currently_watching.py', 'r+')
 cw = f.read()
 f.close()
 
@@ -90,6 +90,6 @@ for link in links:
 driver.close()  # once you have checked all animes in links, close the web driver
 
 # update the currently watching list
-f = open("currently_watching.py", "w")
+f = open("horriblefiles/currently_watching.py", "w")
 f.write(cw)
 f.close()
