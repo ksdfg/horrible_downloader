@@ -1,7 +1,7 @@
 # file to be run to setup horrible downloader
 import os
 
-#install required modules
+# install required modules
 os.system('pip install -r horriblefiles\\requirements.txt')
 os.system('cls')
 
