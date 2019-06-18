@@ -47,12 +47,9 @@ while True:
             cw = f.read()
             f.close()
 
-            print(len(shows))
-
             # add show to list
             cw = cw.replace('{', '{\n\tr"' + name + '": ' + ep + (',' if len(shows) else ''))
-
-            print(len(shows))
+            shows[name] = int(ep)
 
             # update the currently watching list
             f = open("currently_watching.py", "w")
