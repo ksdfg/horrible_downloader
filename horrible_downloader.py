@@ -42,6 +42,13 @@ for link in links:
     # open the page in web driver
     driver.get("https://horriblesubs.info" + link.get("href") + "/#" + str(shows[link.text]))
 
+    # check if latest episode released is less than required episode
+    latest = driver.find_element_by_xpath(r'/html/body/div/div/div[2]/div[2]/div[1]/div/main/div[1]/article/div/div['
+                                          r'4]/div[1]/div[1]/a/strong').text
+    if int(latest) < shows[link.text]:
+        print("Episode", ep, "not yet released T-T")
+        continue
+
     # enter episode number in the search bar
     driver.find_element_by_css_selector('#hs-search > input').send_keys(ep)
     pog.press('enter')
@@ -49,7 +56,7 @@ for link in links:
     # select which episode you want to download (from search results), and view download links
     sleep(2)
     try:
-        hf.episode_selector(driver, ep, preferences['browser']).click()
+        driver.find_element_by_xpath('//*[@id="' + ep + '"]/a').click()
     except NoSuchElementException:  # thrown if no results found
         print("No Download link for episode", ep, preferences['quality'], "T-T")
         continue
@@ -57,7 +64,7 @@ for link in links:
     # select which magnet link you want to open, and open it
     sleep(2)
     try:
-        hf.magnet_selector(driver, ep, preferences['quality'], preferences['browser']).click()
+        driver.find_element_by_xpath('//*[@id="' + ep + '-1080p"]/span[2]/a').click()
     except NoSuchElementException:  # thrown if no magnet link of required quality found
         print("No Download link for episode", ep, preferences['quality'], "T-T")
         continue

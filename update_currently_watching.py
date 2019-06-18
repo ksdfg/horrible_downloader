@@ -12,7 +12,6 @@ curr_shows = list(map(lambda x: x.text.replace('[email protected]', 'iDOLM@STER
 
 # interactive loop
 while True:
-
     print('\n1. Add anime to currently watching list\t(type 1 to select this)'
           '\n2. Remove anime from currently watching\t(type 2 to select this)'
           '\n3. Change next episode to download of anime in currently watching list\t(type 3 to select this)'
@@ -48,13 +47,15 @@ while True:
             f.close()
 
             # add show to list
-            cw = cw.replace('{', '{\n\tr"' + name + '": ' + ep + (',' if len(shows) else ''))
+            cw = cw.replace('{', '{\n\tr"' + name + '": ' + ep + (',' if len(shows) != 0 else ''))
             shows[name] = int(ep)
 
             # update the currently watching list
             f = open("currently_watching.py", "w")
             f.write(cw)
             f.close()
+
+            continue
 
     else:
         print('Invalid option. Please try again.')
