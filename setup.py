@@ -88,4 +88,3 @@ os.system('cls')
 
 # Make your currently watching list
 print("We're done installing the basic softwares! Now let's make a list of anime you are watching this season :)")
-import update_anime

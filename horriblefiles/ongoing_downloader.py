@@ -83,4 +83,5 @@ print('\nPress enter to quit! :)')
 input()
 
 # kill the chromedriver that doesn't kill itself...
-os.system('taskkill /im "chromedriver.exe" /f')
+if preferences['browser'] == 'chrome':
+    os.system('taskkill /im "chromedriver.exe" /f')
