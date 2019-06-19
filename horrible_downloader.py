@@ -7,7 +7,7 @@ import horriblefiles.horrible_functions as hf
 from horriblefiles.user_preferences import preferences
 
 # parse html source of horriblesubs homepage
-soup = bs(requests.get("https://horriblesubs.info/").text, features='html.parser')
+soup = bs(requests.get("https://horriblesubs.info//release-schedule/").text, features='html.parser')
 
 # list of all anime that are released today and are in your currently watching shows
 links = [i for i in soup.select('a[title = "See all releases for this show"]') if i.text in shows.keys()]
