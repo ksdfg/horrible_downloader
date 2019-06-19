@@ -18,14 +18,15 @@ if len(links) == 0:
 # startup procedure for torrent software
 hf.torrent_startup[preferences['torrent']]()
 
-# open a web driver according to browser preference
-driver = hf.drivers[preferences['browser']](executable_path=preferences['driver_path'])
-driver.implicitly_wait(10)  # make driver inherently wait for 10s after opening a page
-
 # read the contents of currently watching file
 f = open('horriblefiles/currently_watching.py', 'r+')
 cw = f.read()
 f.close()
+
+# open a web driver according to browser preference
+driver = hf.drivers[preferences['browser']](executable_path=preferences['driver_path'])
+driver.implicitly_wait(10)  # make driver inherently wait for 10s after opening a page
+os.system('cls')
 
 # iterate for each link
 for link in links:
@@ -76,3 +77,10 @@ driver.close()  # once you have checked all animes in links, close the web drive
 f = open("horriblefiles/currently_watching.py", "w")
 f.write(cw)
 f.close()
+
+# Give the user time to read status report
+print('\nPress enter to quit! :)')
+input()
+
+# kill the chromedriver that doesn't kill itself...
+os.system('taskkill /im "chromedriver.exe" /f')
