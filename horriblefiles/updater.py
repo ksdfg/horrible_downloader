@@ -4,7 +4,7 @@ import io
 import os
 import shutil
 
-print('Downloading updates...')
+print('\nDownloading updates...')
 r = requests.get('https://github.com/ksdfg/horrible_downloader/archive/master.zip', stream=True)
 print('Downloaded zip file from the internet.\nExtracting zip file...')
 r = zipfile.ZipFile(io.BytesIO(r.content))  # convert file to zip file

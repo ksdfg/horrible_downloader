@@ -1,18 +1,24 @@
+# checks and downloads episodes of anime in the currently watching list
+
 import os
 from selenium.common.exceptions import NoSuchElementException
 from bs4 import BeautifulSoup as bs
 import requests
-from currently_watching import shows
-import horrible_functions as hf
-from user_preferences import preferences
+from horriblefiles.currently_watching import shows
+import horriblefiles.horrible_functions as hf
+from horriblefiles.user_preferences import preferences
 
 # parse html source of horriblesubs homepage
 soup = bs(requests.get("https://horriblesubs.info//release-schedule/").text, features='html.parser')
 
 # list of all anime that are released today and are in your currently watching shows
+print('Getting links...')
 links = [i for i in soup.select('a[title = "See all releases for this show"]') if i.text in shows.keys()]
 if len(links) == 0:
     print("Nothing to download today T-T")
+    # Give the user time to read status report
+    print('\nPress enter to quit! :)')
+    input()
     exit(0)
 
 # startup procedure for torrent software
@@ -25,7 +31,7 @@ f.close()
 
 # open a web driver according to browser preference
 driver = hf.drivers[preferences['browser']](executable_path=preferences['driver_path'])
-driver.implicitly_wait(10)  # make driver inherently wait for 10s after opening a page
+# driver.implicitly_wait(10)  # make driver inherently wait for 10s after opening a page
 os.system('cls')
 
 # iterate for each link

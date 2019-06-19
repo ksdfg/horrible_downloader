@@ -1,5 +1,5 @@
 # python script to update your currently watching list
-from currently_watching import shows
+from horriblefiles.currently_watching import shows
 from bs4 import BeautifulSoup as bs
 import requests
 import re
@@ -11,17 +11,18 @@ curr_shows = list(map(lambda x: x.text.replace('[email protected]', 'iDOLM@STER
                          features='html.parser').select('a[title = "See all releases for this show"]')
                       ))
 
-special_chars = ['+', '*', '.', '|', '(', ')', '$', '{', '}', '[', ']']  # set of all special chars in patterns
+special_chars = ['+', '*', '.', '|', '(', ')', '$', '[', ']']  # set of all special chars in patterns
 
 # interactive loop
 while True:
     print('\n1. Add anime to currently watching list\t(type 1 to select this)'
           '\n2. Remove anime from currently watching\t(type 2 to select this)'
           '\n3. Change next episode to download of anime in currently watching list\t(type 3 to select this)'
-          '\n4. Exit\t(type 4 to select this)')     # printing options
+          '\n4. Clear currently watching list\t(type 4 to select this)'
+          '\n5. Exit\t(type 5 to select this)')     # printing options
     choice = input('Choice : ')
 
-    if choice == '4':   # user wants to exit
+    if choice == '5':   # user wants to exit
         break
 
     elif choice == '1':     # user wants to add anime to list
@@ -58,6 +59,8 @@ while True:
         f.write(cw)
         f.close()
 
+        print('\nAnime added!')
+
     elif choice == '2':
         name = input('\nEnter name of anime as written in the schedule of horriblesubs.info'
                      '\nLink to schedule - https://horriblesubs.info/release-schedule/'
@@ -83,6 +86,8 @@ while True:
 
         except KeyError:
             print('This anime cannot be found in your currently watching list T-T')
+
+        print('\nAnime removed!')
 
     elif choice == '3':
         name = input('\nEnter name of anime as written in the schedule of horriblesubs.info'
@@ -114,6 +119,24 @@ while True:
         f = open("horriblefiles/currently_watching.py", "w")
         f.write(cw)
         f.close()
+
+        print('\nEpisode Updated!')
+
+    elif choice == '4':
+        shows.clear()
+        # read the contents of currently watching file
+        f = open('horriblefiles/currently_watching.py', 'r')
+        cw = f.read()
+        f.close()
+
+        cw = cw.split('{')[0] + '{\n}\n'
+
+        # update the currently watching list
+        f = open("horriblefiles/currently_watching.py", "w")
+        f.write(cw)
+        f.close()
+
+        print('List Cleared!')
 
     else:
         print('Invalid option. Please try again.')
