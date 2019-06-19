@@ -1,5 +1,5 @@
 # python script to update your currently watching list
-from horriblefiles.currently_watching import shows
+from currently_watching import shows
 from bs4 import BeautifulSoup as bs
 import requests
 import re
