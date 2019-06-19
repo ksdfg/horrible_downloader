@@ -1,6 +1,4 @@
 import os
-from time import sleep
-import pyautogui as pog
 from selenium.common.exceptions import NoSuchElementException
 from bs4 import BeautifulSoup as bs
 import requests
@@ -40,7 +38,7 @@ for link in links:
         ep = '0' + ep
 
     # open the page in web driver
-    driver.get("https://horriblesubs.info" + link.get("href") + "/#" + str(shows[link.text]))
+    driver.get("https://horriblesubs.info" + link.get("href"))
 
     # check if latest episode released is less than required episode
     latest = driver.find_element_by_xpath(r'/html/body/div/div/div[2]/div[2]/div[1]/div/main/div[1]/article/div/div['
@@ -49,29 +47,14 @@ for link in links:
         print("Episode", ep, "not yet released T-T")
         continue
 
-    # enter episode number in the search bar
-    driver.find_element_by_css_selector('#hs-search > input').send_keys(ep)
-    pog.press('enter')
-
-    # select which episode you want to download (from search results), and view download links
-    sleep(2)
     try:
-        driver.find_element_by_xpath('//*[@id="' + ep + '"]/a').click()
-    except NoSuchElementException:  # thrown if no results found
-        print("No Download link for episode", ep, preferences['quality'], "T-T")
-        continue
-
-    # select which magnet link you want to open, and open it
-    sleep(2)
-    try:
-        driver.find_element_by_xpath('//*[@id="' + ep + '-1080p"]/span[2]/a').click()
+        os.startfile(
+            driver.find_element_by_xpath('//*[@id="' + ep + '-' + preferences['quality'] + '"]/span[2]/a').get_attribute
+            ('href')
+        )
     except NoSuchElementException:  # thrown if no magnet link of required quality found
         print("No Download link for episode", ep, preferences['quality'], "T-T")
         continue
-
-    # click on the okay button to open your torrent downloading software
-    sleep(1)
-    pog.press(hf.torrent_opener[preferences['browser']])
 
     # define path where episode is to be downloaded
     path = preferences['download_path'] + link.text
