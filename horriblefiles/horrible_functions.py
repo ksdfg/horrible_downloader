@@ -13,12 +13,6 @@ drivers = {
     'chrome': wbd.Chrome
 }
 
-# dictionary to select what key presses are required to open torrent in downloading software
-torrent_opener = {
-    'firefox': ['\t', '\t', '\t', '\t', 'enter'],
-    'chrome': ['left', 'enter']
-}
-
 
 # Function for when magnet link is opened in utorrent
 def utorrent_download(path):
