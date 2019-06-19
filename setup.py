@@ -1,16 +1,9 @@
 # file to be run to setup horrible downloader
-from pip._internal import main as pipmain
 import os
 
-# install required modules if not already installed
-pipmain(['install', 'selenium'])
-print('\n')
-pipmain(['install', 'pyautogui'])
-print('\n')
-pipmain(['install', 'beautifulsoup4'])
-print('\n')
-pipmain(['install', 'requests'])
-print('\n')
+# install required modules
+os.system('pip install -r horriblefiles\\requirements.txt')
+os.system('cls')
 
 import requests
 import re
@@ -20,7 +13,7 @@ import io
 
 # take input of what browser to use
 while True:
-    browser = input('\nhorrible downloader right now supports two browsers - Mozilla Firefox and Google Chrome.'
+    browser = input('horrible downloader right now supports two browsers - Mozilla Firefox and Google Chrome.'
                     '\nWe require you to choose which one horrible downloader will use.'
                     '\nBrowser : ').lower()
     # select correct browser according to user input
@@ -34,12 +27,12 @@ while True:
         print('Invalid response. Please check your answer is one of the provided options and try again')
 
 # installing web driver
-driver_path = os.path.join('C:\\', 'Users', os.getlogin(), 'AppData', 'Local', 'Programs', 'Python', 'Python37',
-                           'Lib', 'site-packages', 'selenium', 'webdriver', browser)
+driver_path = os.path.join(os.path.expandvars('%localappdata%'), 'Programs', 'Python', 'Python37', 'Lib',
+                           'site-packages', 'selenium', 'webdriver', browser)
 print('Downloading web driver...')
 # download file from github
 win = '64' if 'PROGRAMFILES(X86)' in os.environ else '32'
-r = requests.get(hf.download_driver[browser][0] + (win if browser=='firefox' else '') + '.zip', stream=True)
+r = requests.get(hf.download_driver[browser][0] + (win if browser == 'firefox' else '') + '.zip', stream=True)
 print('Downloaded zip file from the internet.\nExtracting zip file...')
 r = zipfile.ZipFile(io.BytesIO(r.content))  # convert file to zip file
 r.extractall(driver_path)   # extract zip file at given path
@@ -89,6 +82,9 @@ f = open('horriblefiles/user_preferences.py', 'w')
 f.write(pref)
 f.close()
 
+# clear the terminal
+os.system('cls')
+
 # Make your currently watching list
-print("\nWe're done installing the basic softwares! Now let's make a list of anime you are watching this season :)\n")
-import anime_list
+print("We're done installing the basic softwares! Now let's make a list of anime you are watching this season :)")
+import update_anime
