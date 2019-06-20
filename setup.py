@@ -5,6 +5,7 @@ import os
 os.system('pip install -r horriblefiles\\requirements.txt')
 os.system('taskkill /im "chromedriver.exe" /f')     # kill the chromedriver that doesn't kill itself...
 os.system('cls')
+
 import requests
 import re
 import horriblefiles.horrible_functions as hf
