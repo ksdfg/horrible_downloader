@@ -26,6 +26,8 @@ while True:
     else:
         break
 
+print('\nOpening', name, 'in web driver...')
+
 # open a web driver according to browser preference
 driver = hf.drivers[preferences['browser']](executable_path=preferences['driver_path'])
 driver.implicitly_wait(10)  # make driver inherently wait for 10s after opening a page
@@ -34,11 +36,13 @@ os.system('cls')
 # parse html source of horriblesubs.info shows page
 driver.get("https://horriblesubs.info" + tags[all_shows.index(name)].get('href'))
 
+# get last episode released
 last = driver.find_element_by_xpath('//*[@class="hs-shows"]/div[1]').get_attribute('id').split('v')[0]
-hotkey('alt', '\t')
+hotkey('alt', '\t')     # bring focus back to downloader from driver
 
+# take input of which episode to start from
 while True:
-    start = input("Enter the starting episode :  (Press 0 to start from first episode)")
+    start = input("\nEnter the starting episode (Press 0 to start from first episode) : ")
     if int(start) < 0:
         print("Invalid episode number")
     elif int(start) > int(last):
@@ -48,8 +52,9 @@ while True:
             start = '0' + start
         break
 
+# take input of which episode to end with
 while True:
-    end = input("Enter the ending episode :  (Press 0 to end on last episode)")
+    end = input("\nEnter the ending episode (Press 0 to end on last episode) : ")
     if end is '0':
         end = last
         break
@@ -64,37 +69,41 @@ while True:
             end = '0' + end
         break
 
+# press show more till we can see the start episode
+print('\nGetting list of episodes of', name, '...')
 while True:
     try:
         driver.find_element_by_xpath('//*[@id="' + start + '"]')
-        break
+        break   # if we can find start, it'll break from loop
 
-    except NoSuchElementException:
+    except NoSuchElementException:  # Thrown if driver can't find start
 
         try:
-            driver.find_element_by_xpath('//*[@class="show-more"]/a').click()
-        except NoSuchElementException:
+            driver.find_element_by_xpath('//*[@class="show-more"]/a').click()   # click on "show more" button
+        except NoSuchElementException:  # Thrown if there's no more to show
             break
 
+# Create a list of all episode numbers visible
 episodes = list(map(lambda x: x.get_attribute('id'), driver.find_elements_by_xpath('//*[@class="hs-shows"]/div')))
 
 if start == '00':
-    start = episodes[-1]
+    start = episodes[-1]    # set starting episode to first ep released in horrible
 
-start_ind = 0
+# get index of start (made for the cases when only v2 of an ep is available)
+start_ind = -1
 for i in range(len(episodes)):
     if episodes[i].find(start) > -1:
         start_ind = i
         break
 
-end_ind = 0
+# get index of end (made for the cases when only v2 of an ep is available)
+end_ind = -1
 for i in range(len(episodes)):
     if episodes[i].find(end) > -1:
         end_ind = i
         break
 
-episodes = episodes[end_ind: start_ind+1]
-print(episodes)
+episodes = episodes[end_ind: start_ind+1]   # list of all eps we need to download
 
 # define path where episode is to be downloaded
 path = preferences['download_path'] + name
@@ -104,9 +113,11 @@ if not os.path.exists(path):
 # startup procedure for torrent software
 hf.torrent_startup[preferences['torrent']]()
 
+# loop to start all downloads
 for ep in episodes:
     try:
-        print('\nstarting download', ep)
+        print('\nstarting to download ep', ep)
+        # open magnet link of ep in preferred quality of user
         os.startfile(
             driver.find_element_by_xpath(
                 '//*[@id="' + ep + '-' + preferences['quality'] + '"]/span[2]/a').get_attribute
