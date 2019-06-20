@@ -7,7 +7,7 @@ print('\n1. Check and download new episodes of anime in your currently watching 
       '\n5. Exit\t(type 5 to select this)')     # printing options
 choice = input('Choice : ')
 
-if choice == '4':
+if choice == '5':
     exit(0)
 
 elif choice == '1':
