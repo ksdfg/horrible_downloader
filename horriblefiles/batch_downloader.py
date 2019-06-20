@@ -101,33 +101,13 @@ if not os.path.exists(path):
 hf.torrent_startup[preferences['torrent']]()
 
 # loop to start all downloads
-'''
-for ep in episodes:
-    try:
-        print('\nstarting to download ep', ep)
-        # open magnet link of ep in preferred quality of user
-        os.startfile(
-            driver.find_element_by_xpath(
-                '//*[@id="' + ep + '-' + preferences['quality'] + '"]/span[2]/a').get_attribute
-            ('href')
-        )
-    except NoSuchElementException:  # thrown if no magnet link of required quality found
-        print("No Download link for episode", ep, preferences['quality'], "T-T")
-        continue
-
-    # start downloading torrent from your preferred software
-    hf.torrents[preferences['torrent']](path)
-
-    # give confirmation message to user on terminal
-    print("Downloading episode", ep, "now :)")
-'''
+print('\nStarting downloads...\n')
 hf.start_downloads(episodes, driver, path)
 
 driver.close()  # once you have checked all animes in links, close the web driver
 
 # Give the user time to read status report
-print('\nPress enter to quit! :)')
-input()
+input('\nPress enter to quit! :)')
 
 # kill the chromedriver that doesn't kill itself...
 os.system('taskkill /im "chromedriver.exe" /f')

@@ -83,9 +83,9 @@ def get_episode_list(driver, ep):
 
 # function that iterates through a list of episodes and starts downloads of each
 def start_downloads(episodes, driver, path):
+    i = 0   # number of episodes downloaded
     for ep in episodes:
         try:
-            print('\nstarting to download ep', ep)
             # open magnet link of ep in preferred quality of user
             os.startfile(
                 driver.find_element_by_xpath(
@@ -101,3 +101,7 @@ def start_downloads(episodes, driver, path):
 
         # give confirmation message to user on terminal
         print("Downloading episode", ep, "now :)")
+
+        i += 1  # increase number of episodes downloaded
+
+    return i

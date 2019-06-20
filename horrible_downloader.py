@@ -5,7 +5,7 @@ print('\n1. Check and download new episodes of anime in your currently watching 
       '\n3. Update currently watching list\t(type 3 to select this)'
       '\n4. Update horrible downloader\t(type 4 to select this)'
       '\n5. Exit\t(type 5 to select this)')     # printing options
-choice = input('Choice : ')
+choice = input('\nChoice : ')
 
 if choice == '5':
     exit(0)

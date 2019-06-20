@@ -19,7 +19,7 @@ while True:
           '\n3. Change next episode to download of anime in currently watching list\t(type 3 to select this)'
           '\n4. Clear currently watching list\t(type 4 to select this)'
           '\n5. Exit\t(type 5 to select this)')     # printing options
-    choice = input('Choice : ')
+    choice = input('\nChoice : ')
 
     if choice == '5':   # user wants to exit
         break
