@@ -30,6 +30,9 @@ while True:
 # installing web driver
 driver_path = os.path.join(os.path.expandvars('%localappdata%'), 'Programs', 'Python', 'Python37', 'Lib',
                            'site-packages', 'selenium', 'webdriver', browser)
+if not os.path.exists(driver_path):
+    os.mkdir(driver_path)  # if directory doesn't exist, make one
+
 print('Downloading web driver...')
 # download file from github
 win = '64' if 'PROGRAMFILES(X86)' in os.environ else '32'
@@ -87,5 +90,6 @@ f.close()
 os.system('cls')
 
 # Make your currently watching list
-print("We're done installing the basic softwares! Now let's make a list of anime you are watching this season :)")
-import update_anime
+print("We're done installing the basic softwares! Now let's make a list of anime you are watching this season :)"
+      "\nPlease wait while we bring up the currently watching list updater...")
+import horriblefiles.update_anime
