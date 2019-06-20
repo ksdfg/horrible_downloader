@@ -69,22 +69,9 @@ while True:
             end = '0' + end
         break
 
-# press show more till we can see the start episode
+# Create smallest list of all episode numbers that includes given episode
 print('\nGetting list of episodes of', name, '...')
-while True:
-    try:
-        driver.find_element_by_xpath('//*[@id="' + start + '"]')
-        break   # if we can find start, it'll break from loop
-
-    except NoSuchElementException:  # Thrown if driver can't find start
-
-        try:
-            driver.find_element_by_xpath('//*[@class="show-more"]/a').click()   # click on "show more" button
-        except NoSuchElementException:  # Thrown if there's no more to show
-            break
-
-# Create a list of all episode numbers visible
-episodes = list(map(lambda x: x.get_attribute('id'), driver.find_elements_by_xpath('//*[@class="hs-shows"]/div')))
+episodes = hf.get_episode_list(driver, start)
 
 if start == '00':
     start = episodes[-1]    # set starting episode to first ep released in horrible
@@ -114,6 +101,7 @@ if not os.path.exists(path):
 hf.torrent_startup[preferences['torrent']]()
 
 # loop to start all downloads
+'''
 for ep in episodes:
     try:
         print('\nstarting to download ep', ep)
@@ -132,6 +120,8 @@ for ep in episodes:
 
     # give confirmation message to user on terminal
     print("Downloading episode", ep, "now :)")
+'''
+hf.start_downloads(episodes, driver, path)
 
 driver.close()  # once you have checked all animes in links, close the web driver
 

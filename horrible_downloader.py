@@ -15,6 +15,7 @@ elif choice == '1':
     import horriblefiles.ongoing_downloader
 
 elif choice == '4':
+    print('\nStarting updater...')
     import horriblefiles.updater
 
 elif choice == '3':

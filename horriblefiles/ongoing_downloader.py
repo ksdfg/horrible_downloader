@@ -2,8 +2,6 @@
 
 import os
 from selenium.common.exceptions import NoSuchElementException
-from bs4 import BeautifulSoup as bs
-import requests
 from horriblefiles.currently_watching import shows
 import horriblefiles.horrible_functions as hf
 from horriblefiles.user_preferences import preferences
