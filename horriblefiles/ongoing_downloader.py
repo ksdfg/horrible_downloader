@@ -4,6 +4,7 @@ import os
 from horriblefiles.currently_watching import shows
 import horriblefiles.horrible_functions as hf
 from horriblefiles.user_preferences import preferences
+from pyautogui import hotkey
 
 # startup procedure for torrent software
 hf.torrent_startup[preferences['torrent']]()
@@ -17,6 +18,7 @@ f.close()
 driver = hf.drivers[preferences['browser']](executable_path=preferences['driver_path'])
 # driver.implicitly_wait(10)  # make driver inherently wait for 10s after opening a page
 os.system('cls')
+hotkey('alt', '\t')
 
 # iterate for each link
 for i in shows.keys():
