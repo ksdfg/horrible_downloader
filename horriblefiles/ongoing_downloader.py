@@ -8,19 +8,6 @@ from horriblefiles.currently_watching import shows
 import horriblefiles.horrible_functions as hf
 from horriblefiles.user_preferences import preferences
 
-# parse html source of horriblesubs homepage
-soup = bs(requests.get("https://horriblesubs.info//release-schedule/").text, features='html.parser')
-
-# list of all anime that are released today and are in your currently watching shows
-print('Getting links...')
-links = [i for i in soup.select('a[title = "See all releases for this show"]') if i.text in shows.keys()]
-if len(links) == 0:
-    print("Nothing to download today T-T")
-    # Give the user time to read status report
-    print('\nPress enter to quit! :)')
-    input()
-    exit(0)
-
 # startup procedure for torrent software
 hf.torrent_startup[preferences['torrent']]()
 
@@ -35,22 +22,22 @@ driver = hf.drivers[preferences['browser']](executable_path=preferences['driver_
 os.system('cls')
 
 # iterate for each link
-for link in links:
+for i in shows.keys():
 
-    print("\n" + link.text)     # print name of anime you are checking
+    print("\n" + i)     # print name of anime you are checking
 
     # var that stores which episode you are trying to download
-    ep = str(shows[link.text])
+    ep = str(shows[i][0])
     if len(ep) == 1:
         ep = '0' + ep
 
     # open the page in web driver
-    driver.get("https://horriblesubs.info" + link.get("href"))
+    driver.get("https://horriblesubs.info" + shows[i][1])
 
     # check if latest episode released is less than required episode
     latest = driver.find_element_by_xpath(r'/html/body/div/div/div[2]/div[2]/div[1]/div/main/div[1]/article/div/div['
                                           r'4]/div[1]/div[1]/a/strong').text
-    if int(latest) < shows[link.text]:
+    if int(latest) < shows[i][0]:
         print("Episode", ep, "not yet released T-T")
         continue
 
@@ -64,7 +51,7 @@ for link in links:
         continue
 
     # define path where episode is to be downloaded
-    path = preferences['download_path'] + link.text
+    path = preferences['download_path'] + i
     if not os.path.exists(path):
         os.mkdir(path)  # if directory doesn't exist, make one
 
@@ -75,7 +62,7 @@ for link in links:
     print("Downloading episode", ep, "now :)")
 
     # next time try to download the next episode by updating currently watching
-    cw = cw.replace((link.text + '": ' + str(shows[link.text])), (link.text + '": ' + str(shows[link.text]+1)))
+    cw = cw.replace((i + '": ' + str(shows[i][0])), (i + '": ' + str(shows[i][0]+1)))
 
 driver.close()  # once you have checked all animes in links, close the web driver
 
