@@ -14,7 +14,7 @@ tags = bs(requests.get("https://horriblesubs.info/shows/").text,
           features='html.parser').select('div [class = "ind-show"] > a')
 all_shows = list(map(lambda x: x.text.replace('[email protected]', 'iDOLM@STER'),tags))
 
-# Take name of anime to downlaod and validate
+# Take name of anime to download and validate
 while True:
     name = input('\nEnter name of anime as written in the show library of horriblesubs.info'
                  '\nLink to show library - https://horriblesubs.info/shows/'
@@ -33,32 +33,13 @@ driver.implicitly_wait(10)  # make driver inherently wait for 10s after opening 
 os.system('cls')
 
 # parse html source of horriblesubs.info shows page
-link = tags[all_shows.index(name)].get('href')
+driver.get("https://horriblesubs.info" + tags[all_shows.index(name)].get('href'))
 
-driver.get("https://horriblesubs.info" + link)
-
-while True:
-    try:
-        driver.find_element_by_xpath('//*[@class="more-button"]').click()
-        sleep(0.7)
-    except NoSuchElementException:
-        break
-    except stale:
-        continue
-
-episodes = list(map(lambda x: x.get_attribute('id'), driver.find_elements_by_css_selector('div [class="rls-info-container"]')))
-
-print(episodes)
-
-first = episodes[-1]
-last = episodes[0]
+last = driver.find_element_by_xpath('//*[@class="hs-shows"]/div[1]').get_attribute('id')
 
 while True:
     start = input("Enter the starting episode :  (Press 0 to start from first episode)")
-    if start is '0':
-        start = first
-        break
-    elif int(start) < 0:
+    if int(start) < 0:
         print("Invalid episode number")
     elif int(start) > int(last):
         print("Start episode cannot be greater than the last episode of Anime")
@@ -76,6 +57,26 @@ while True:
         print("Ending episode number has not been released yet")
     else:
         break
+
+
+while True:
+    try:
+        driver.find_element_by_xpath('//*[@id="' + start + '"]')
+        break
+    except NoSuchElementException:
+        try:
+            driver.find_element_by_xpath('//*[@class="more-button"]').click()
+            sleep(0.7)
+        except NoSuchElementException:
+            break
+        except stale:
+            continue
+    except stale:
+        continue
+
+episodes = list(map(lambda x: x.get_attribute('id'), driver.find_elements_by_xpath('//*[@class="rls-info-container"]')))
+
+first = episodes[-1]
 
 if len(start) is 1:
     start = '0' + start
