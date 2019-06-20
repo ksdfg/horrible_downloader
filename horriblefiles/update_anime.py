@@ -6,10 +6,9 @@ import re
 
 # get a list of ALL currently airing shows
 # make sure iDOLM@STER doesn't get replaced by [email protected]
-curr_shows = list(map(lambda x: x.text.replace('[email protected]', 'iDOLM@STER'),
-                      bs(requests.get("https://horriblesubs.info/release-schedule/").text,
-                         features='html.parser').select('a[title = "See all releases for this show"]')
-                      ))
+tags = bs(requests.get("https://horriblesubs.info/release-schedule/").text,
+          features='html.parser').select('a[title = "See all releases for this show"]')
+curr_shows = list(map(lambda x: x.text.replace('[email protected]', 'iDOLM@STER'), tags))
 
 special_chars = ['+', '*', '.', '|', '(', ')', '$', '[', ']']  # set of all special chars in patterns
 
@@ -51,7 +50,8 @@ while True:
         f.close()
 
         # add show to list
-        cw = cw.replace('{', '{\n\tr"' + name + '": ' + ep + (',' if len(shows) != 0 else ''))
+        cw = cw.replace('{', '{\n\tr"' + name + '": [' + ep + ', "' + tags[curr_shows.index(name)].get('href') +
+                        '"]' + (',' if len(shows) != 0 else ''))
         shows[name] = int(ep)
 
         # update the currently watching list
@@ -76,7 +76,8 @@ while True:
             pattern_name = name     # copy of name to be used in the pattern
             for i in special_chars:
                 pattern_name = pattern_name.replace(i, '\\'+i)      # add \ to escape special sequence
-            cw = re.sub('\n.+"' + pattern_name + '".+\n', '\n', cw)
+            cw = re.sub('\n.+"' + pattern_name + '".+,\n', '\n', cw)
+            cw = re.sub(',\n.+"' + pattern_name + '".+\n}', '\n}', cw)
             del shows[name]
 
             # update the currently watching list
@@ -113,7 +114,7 @@ while True:
         pattern_name = name     # copy of name to be used in the pattern
         for i in special_chars:
             pattern_name = pattern_name.replace(i, '\\'+i)      # add \ to escape special sequence
-        cw = re.sub(pattern_name + '": \d+', name + '": ' + ep, cw)
+        cw = re.sub(pattern_name + '": \[\d+', name + '": [' + ep, cw)
 
         # update the currently watching list
         f = open("horriblefiles/currently_watching.py", "w")
@@ -136,7 +137,7 @@ while True:
         f.write(cw)
         f.close()
 
-        print('List Cleared!')
+        print('\nList Cleared!')
 
     else:
         print('Invalid option. Please try again.')
