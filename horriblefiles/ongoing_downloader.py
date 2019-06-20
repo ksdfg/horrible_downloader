@@ -35,8 +35,7 @@ for i in shows.keys():
     driver.get("https://horriblesubs.info" + shows[i][1])
 
     # check if latest episode released is less than required episode
-    latest = driver.find_element_by_xpath(r'/html/body/div/div/div[2]/div[2]/div[1]/div/main/div[1]/article/div/div['
-                                          r'4]/div[1]/div[1]/a/strong').text
+    latest = driver.find_element_by_xpath('//*[@class="hs-shows"]/div[1]').get_attribute('id')
     if int(latest) < shows[i][0]:
         print("Episode", ep, "not yet released T-T")
         continue

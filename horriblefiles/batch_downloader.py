@@ -5,8 +5,7 @@ import requests
 import horriblefiles.horrible_functions as hf
 from horriblefiles.user_preferences import preferences
 from selenium.common.exceptions import NoSuchElementException
-from selenium.common.exceptions import StaleElementReferenceException as stale
-from time import sleep
+from pyautogui import hotkey
 
 # get a list of ALL shows available on horriblesubs.info
 # make sure iDOLM@STER doesn't get replaced by [email protected]
@@ -35,7 +34,8 @@ os.system('cls')
 # parse html source of horriblesubs.info shows page
 driver.get("https://horriblesubs.info" + tags[all_shows.index(name)].get('href'))
 
-last = driver.find_element_by_xpath('//*[@class="hs-shows"]/div[1]').get_attribute('id')
+last = driver.find_element_by_xpath('//*[@class="hs-shows"]/div[1]').get_attribute('id').split('v')[0]
+hotkey('alt', '\t')
 
 while True:
     start = input("Enter the starting episode :  (Press 0 to start from first episode)")
@@ -44,6 +44,8 @@ while True:
     elif int(start) > int(last):
         print("Start episode cannot be greater than the last episode of Anime")
     else:
+        if len(start) is 1:
+            start = '0' + start
         break
 
 while True:
@@ -55,35 +57,44 @@ while True:
         print("Invalid episode number")
     elif int(end) > int(last):
         print("Ending episode number has not been released yet")
+    elif int(end) < int(start):
+        print("You cannot end before you start")
     else:
+        if len(end) is 1:
+            end = '0' + end
         break
-
 
 while True:
     try:
         driver.find_element_by_xpath('//*[@id="' + start + '"]')
         break
+
     except NoSuchElementException:
+
         try:
-            driver.find_element_by_xpath('//*[@class="more-button"]').click()
-            sleep(0.7)
+            driver.find_element_by_xpath('//*[@class="show-more"]/a').click()
         except NoSuchElementException:
             break
-        except stale:
-            continue
-    except stale:
-        continue
 
-episodes = list(map(lambda x: x.get_attribute('id'), driver.find_elements_by_xpath('//*[@class="rls-info-container"]')))
+episodes = list(map(lambda x: x.get_attribute('id'), driver.find_elements_by_xpath('//*[@class="hs-shows"]/div')))
 
-first = episodes[-1]
+if start == '00':
+    start = episodes[-1]
 
-if len(start) is 1:
-    start = '0' + start
-if len(end) is 1:
-    end = '0' + end
+start_ind = 0
+for i in range(len(episodes)):
+    if episodes[i].find(start) > -1:
+        start_ind = i
+        break
 
-episodes = episodes[episodes.index(start) : episodes.index(end)+1]
+end_ind = 0
+for i in range(len(episodes)):
+    if episodes[i].find(end) > -1:
+        end_ind = i
+        break
+
+episodes = episodes[end_ind: start_ind+1]
+print(episodes)
 
 # define path where episode is to be downloaded
 path = preferences['download_path'] + name
