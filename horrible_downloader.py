@@ -21,5 +21,9 @@ elif choice == '3':
     print('\nBringing up the currently watching list updater...')
     import horriblefiles.update_anime
 
+elif choice == '2':
+    print('\nStarting the batch downloader...')
+    import horriblefiles.batch_downloader
+
 else:
     print('Invalid option. Please try again.')
