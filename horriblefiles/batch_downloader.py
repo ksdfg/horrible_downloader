@@ -4,7 +4,6 @@ from bs4 import BeautifulSoup as bs
 import requests
 import horriblefiles.horrible_functions as hf
 from horriblefiles.user_preferences import preferences
-from selenium.common.exceptions import NoSuchElementException
 from pyautogui import hotkey
 
 # get a list of ALL shows available on horriblesubs.info
@@ -30,7 +29,7 @@ print('\nOpening', name, 'in web driver...')
 
 # open a web driver according to browser preference
 driver = hf.drivers[preferences['browser']](executable_path=preferences['driver_path'])
-driver.implicitly_wait(10)  # make driver inherently wait for 10s after opening a page
+# driver.implicitly_wait(10)  # make driver inherently wait for 10s after opening a page
 os.system('cls')
 
 # parse html source of horriblesubs.info shows page
