@@ -10,7 +10,8 @@ Automatically download all episodes of the currently airing anime that you are w
     horrible downloader currently only works on Windows systems.
 
 - ***Python 3 and above***<br/>
-    Link to download of installation file : https://www.python.org/downloads/
+    Link to download of installation file : https://www.python.org/downloads/<br/>
+    While installing, before clicking on `Install Now` option, make sure to select the `Add Python to path` option given below.
     
 - ***Mozilla Firefox or Google Chrome***<br/>
     horrible downloader requires one of the above two browsers to be installed on your system. We are working to make this program get the required magnet links without having to open any browsers, but for now having one of these is essential.
