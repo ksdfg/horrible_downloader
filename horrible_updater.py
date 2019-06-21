@@ -4,14 +4,12 @@ import io
 import os
 import shutil
 
-print('\nThis is a beta updater - the updates are not fully tested.'
-      '\nGo to https://github.com/ksdfg/horrible_downloader/releases for a list of stable releases'
-      '\nStill want to update? (y/n)')
-if input('\nChoice : ') != 'y':
+if input('\nThis will clear your preferences - you will have to setup again.'
+         '\nStill want to update? (y/n) - ') != 'y':
     exit(0)
 
 print('\nDownloading updates...')
-r = requests.get('https://github.com/ksdfg/horrible_downloader/archive/master.zip', stream=True)
+r = requests.get('https://github.com/ksdfg/horrible_downloader/releases/latest/download/horrible_downloader.zip', stream=True)
 print('Downloaded zip file from the internet.\nExtracting zip file...')
 r = zipfile.ZipFile(io.BytesIO(r.content))  # convert file to zip file
 r.extractall(os.getcwd())   # extract zip file at given path
