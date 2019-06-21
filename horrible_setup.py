@@ -28,8 +28,7 @@ while True:
         print('Invalid response. Please check your answer is one of the provided options and try again')
 
 # installing web driver
-driver_path = os.path.join(os.path.expandvars('%localappdata%'), 'Programs', 'Python', 'Python37', 'Lib',
-                           'site-packages', 'selenium', 'webdriver', browser)
+driver_path = os.path.join(os.getcwd(), 'horriblefiles', 'webdriver')
 if not os.path.exists(driver_path):
     os.mkdir(driver_path)  # if directory doesn't exist, make one
 
