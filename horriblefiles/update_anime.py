@@ -16,10 +16,10 @@ special_chars = ['+', '*', '.', '|', '(', ')', '$', '[', ']']  # set of all spec
 while True:
     print('\n1. Add anime to currently watching list\t(type 1 to select this)'
           '\n2. Remove anime from currently watching\t(type 2 to select this)'
-          '\n3. Change next episode to download of anime in currently watching list\t(type 3 to select this)'
+          '\n3. Change episode to start downloading from of anime in currently watching list\t(type 3 to select this)'
           '\n4. Clear currently watching list\t(type 4 to select this)'
           '\n5. Exit\t(type 5 to select this)')     # printing options
-    choice = input('Choice : ')
+    choice = input('\nChoice : ')
 
     if choice == '5':   # user wants to exit
         break
@@ -38,7 +38,7 @@ while True:
             print('You are already watching this show!')
             continue
 
-        ep = input('Which episode to download next time you run horrible downloader? ')
+        ep = input('Which episode to start downloading from next time you run horrible downloader? ')
         # check if input is valid
         if not ep.isdecimal() or int(ep) < 1:
             print('This is not a valid episode number.')
@@ -99,7 +99,7 @@ while True:
             print('This anime cannot be found in your currently watching list T-T')
             continue
 
-        ep = input('Which episode to download next time you run horrible downloader? ')
+        ep = input('Which episode to start downloading from next time you run horrible downloader? ')
         # check if input is valid
         if not ep.isdecimal() or int(ep) < 1:
             print('This is not a valid episode number.')

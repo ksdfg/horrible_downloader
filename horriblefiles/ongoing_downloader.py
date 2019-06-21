@@ -1,12 +1,10 @@
 # checks and downloads episodes of anime in the currently watching list
 
 import os
-from selenium.common.exceptions import NoSuchElementException
-from bs4 import BeautifulSoup as bs
-import requests
 from horriblefiles.currently_watching import shows
 import horriblefiles.horrible_functions as hf
 from horriblefiles.user_preferences import preferences
+from pyautogui import hotkey
 
 # startup procedure for torrent software
 hf.torrent_startup[preferences['torrent']]()
@@ -20,6 +18,7 @@ f.close()
 driver = hf.drivers[preferences['browser']](executable_path=preferences['driver_path'])
 # driver.implicitly_wait(10)  # make driver inherently wait for 10s after opening a page
 os.system('cls')
+hotkey('alt', '\t')
 
 # iterate for each link
 for i in shows.keys():
@@ -40,28 +39,20 @@ for i in shows.keys():
         print("Episode", ep, "not yet released T-T")
         continue
 
-    try:
-        os.startfile(
-            driver.find_element_by_xpath('//*[@id="' + ep + '-' + preferences['quality'] + '"]/span[2]/a').get_attribute
-            ('href')
-        )
-    except NoSuchElementException:  # thrown if no magnet link of required quality found
-        print("No Download link for episode", ep, preferences['quality'], "T-T")
-        continue
-
     # define path where episode is to be downloaded
     path = preferences['download_path'] + i
     if not os.path.exists(path):
         os.mkdir(path)  # if directory doesn't exist, make one
 
-    # start downloading torrent from your preferred software
-    hf.torrents[preferences['torrent']](path)
+    # Create smallest list of all episode numbers that includes given episode
+    print('Getting list of episodes to download...')
+    episodes = hf.get_episode_list(driver, ep)
 
-    # give confirmation message to user on terminal
-    print("Downloading episode", ep, "now :)")
+    episodes = episodes[:episodes.index(ep)+1]   # list of all eps we need to download
+    no_eps = hf.start_downloads(episodes, driver, path)
 
     # next time try to download the next episode by updating currently watching
-    cw = cw.replace((i + '": ' + str(shows[i][0])), (i + '": ' + str(shows[i][0]+1)))
+    cw = cw.replace((i + '": [' + str(shows[i][0])), (i + '": [' + str(shows[i][0]+no_eps)))
 
 driver.close()  # once you have checked all animes in links, close the web driver
 
@@ -71,8 +62,7 @@ f.write(cw)
 f.close()
 
 # Give the user time to read status report
-print('\nPress enter to quit! :)')
-input()
+input('\nPress enter to quit! :)')
 
 # kill the chromedriver that doesn't kill itself...
 if preferences['browser'] == 'chrome':

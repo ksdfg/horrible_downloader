@@ -6,6 +6,8 @@ from selenium import webdriver as wbd
 from time import sleep
 import pyautogui as pog
 import os
+from selenium.common.exceptions import NoSuchElementException
+from horriblefiles.user_preferences import preferences
 
 # Dictionary of web drivers according to browser
 drivers = {
@@ -58,3 +60,49 @@ def qbittorrent_startup():
 # default dictionary that returns the startup functions of torrenting softwares
 torrent_startup = dd(lambda: lambda: None)
 torrent_startup['qbittorrent'] = qbittorrent_startup
+
+
+# function that returns smallest list of all episode numbers that includes given episode
+def get_episode_list(driver, ep):
+    # press show more till we can see the start episode
+    while True:
+        try:
+            driver.find_element_by_xpath('//*[@id="' + ep + '"]')
+            break  # if we can find start, it'll break from loop
+
+        except NoSuchElementException:  # Thrown if driver can't find start
+
+            try:
+                driver.find_element_by_xpath('//*[@class="show-more"]/a').click()  # click on "show more" button
+                sleep(0.7)
+            except NoSuchElementException:  # Thrown if there's no more to show
+                break
+
+    # Create a list of all episode numbers visible
+    return list(map(lambda x: x.get_attribute('id'), driver.find_elements_by_xpath('//*[@class="hs-shows"]/div')))
+
+
+# function that iterates through a list of episodes and starts downloads of each
+def start_downloads(episodes, driver, path):
+    i = 0   # number of episodes downloaded
+    for ep in episodes:
+        try:
+            # open magnet link of ep in preferred quality of user
+            os.startfile(
+                driver.find_element_by_xpath(
+                    '//*[@id="' + ep + '-' + preferences['quality'] + '"]/span[2]/a').get_attribute
+                ('href')
+            )
+        except NoSuchElementException:  # thrown if no magnet link of required quality found
+            print("No Download link for episode", ep, preferences['quality'], "T-T")
+            continue
+
+        # start downloading torrent from your preferred software
+        torrents[preferences['torrent']](path)
+
+        # give confirmation message to user on terminal
+        print("Downloading episode", ep, "now :)")
+
+        i += 1  # increase number of episodes downloaded
+
+    return i
