@@ -39,7 +39,6 @@ We have finished installing the software with your preferences! Now all we need 
 
 <hr />
 
-
 ## How to use
 
 horrible downloader is very simple to use! You simply need to run `horrible_downloader.py`, which will lead you to a menu that lists down the possible tasks you can perform with this tool. We will now go through these :
@@ -47,6 +46,8 @@ horrible downloader is very simple to use! You simply need to run `horrible_down
 - Check and download new episodes of anime in your currently watching list
   - Type `1` to start this task. This will basically go through all the shows in your currently watching list, check if any new episodes have been released and start downloading them if they have.<br/><br/>
 - Batch download of episodes of an anime
-  - <br/><br/>
+  - Type `2` to start this task. This will allow you to download all episodes in a range - or all episodes released - of an anime on horriblesubs.info<br/><br/>
 - Update currently watching list
-  - <br/><br/>
+  - Type `3` to start this task. This brings up the menu from the end of the end of the installation process. It allows you to add anime to your list, remove anime from your list, change the episode from which downloads will start next time of an anime already in your list or clear your currently watching.<br/><br/>
+
+<hr />
