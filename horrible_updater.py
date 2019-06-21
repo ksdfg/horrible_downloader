@@ -4,6 +4,12 @@ import io
 import os
 import shutil
 
+print('\nThis is a beta updater - the updates are not fully tested.'
+      '\nGo to https://github.com/ksdfg/horrible_downloader/releases for a list of stable releases'
+      '\nStill want to update? (y/n)')
+if input('\nChoice : ') != 'y':
+    exit(0)
+
 print('\nDownloading updates...')
 r = requests.get('https://github.com/ksdfg/horrible_downloader/archive/master.zip', stream=True)
 print('Downloaded zip file from the internet.\nExtracting zip file...')
