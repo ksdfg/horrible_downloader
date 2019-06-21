@@ -24,11 +24,9 @@ Automatically download all episodes of the currently airing anime that you are w
 
 - First ensure that you have all the pre-requisite softwares.<br/><br/>
 - Download all the required software files from here. Unzip them in any directory on your computer.<br/><br/>
-- Run the `horrible_setup.py` file to start the installation process.
+- Run the `horrible_setup.py` file to start the installation process. Wait for the installer to install the required Python modules in your computer. This could take a while.
   - You can run the file by double clicking it, or going to the file directory in the cmd and running `python horrible_setup.py`<br/><br/>
-- Wait for the installer to install the required Python modules in your computer. This could take a while.<br/><br/>
-- When the installer shows you a prompt to tell it which browser out of given two options would you like to use, type the name of your preferred browser and press enter.<br/><br/>
-- Wait for the installer to download the required web driver and unzip it. This could take a while.<br/><br/>
+- When the installer shows you a prompt to tell it which browser out of given two options would you like to use, type the name of your preferred browser and press enter. Wait for the installer to download the required web driver and unzip it. This could take a while.<br/><br/>
 - When the installer shows you a prompt to tell it which software is associated with torrents in your system, type the name of the software associated with torrents and press enter. To find out which software is supported by your system -
   - Search for default apps in your search menu
   - Click on `Choose default apps by file type`
@@ -47,7 +45,7 @@ We have finished installing the software with your preferences! Now all we need 
 horrible downloader is very simple to use! You simply need to run `horrible_downloader.py`, which will lead you to a menu that lists down the possible tasks you can perform with this tool. We will now go through these :
 
 - Check and download new episodes of anime in your currently watching list
-  - <br/><br/>
+  - Type `1` to start this task. This will basically go through all the shows in your currently watching list, check if any new episodes have been released and start downloading them if they have.<br/><br/>
 - Batch download of episodes of an anime
   - <br/><br/>
 - Update currently watching list

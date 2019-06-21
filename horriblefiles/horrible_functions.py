@@ -74,6 +74,7 @@ def get_episode_list(driver, ep):
 
             try:
                 driver.find_element_by_xpath('//*[@class="show-more"]/a').click()  # click on "show more" button
+                sleep(0.7)
             except NoSuchElementException:  # Thrown if there's no more to show
                 break
 
