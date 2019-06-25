@@ -3,11 +3,11 @@ from bs4 import BeautifulSoup as bs
 import requests
 from datetime import datetime as dt, timedelta as td
 
-day = 5 + (2 * dt.today().weekday())
+day = {'Monday': 5, 'Tuesday': 7, 'Wednesday': 9, 'Thursday': 11, 'Friday': 13, 'Saturday': 15, 'Sunday': 17}
 
 soup = bs(requests.get('https://horriblesubs.info/release-schedule/').text, features='html.parser')
 
-tr = soup.select('div [class="entry-content"] > table:nth-child({}) > tr'.format(day))
+tr = soup.select('div [class="entry-content"] > table:nth-child({}) > tr'.format(day[soup.select_one('#today').text.split()[0]]))
 
 times = set()
 
@@ -16,3 +16,4 @@ for i in tr:
     print(hs)
     time = str((dt.now() + td(hours=hs[0], minutes=hs[1])).time()).split(':')
     times.add('{}:{}'.format(time[0], time[1]))
+    print('{}:{}'.format(time[0], time[1]))
