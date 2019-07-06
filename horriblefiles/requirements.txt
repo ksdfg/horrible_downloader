@@ -2,3 +2,6 @@ selenium
 beautifulsoup4
 pyautogui
 requests
+pytz
+tzlocal
+pywin32
