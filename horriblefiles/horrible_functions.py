@@ -1,12 +1,17 @@
 # This file basically has all the functions and dictionaries that allow our system to be modular
 # Which functions / variables are used depends on the user's preference settings
 
+# add horriblehome to sys.path
+import sys
+import os
+sys.path.append(os.path.expandvars('%horriblehome%'))
+
 from collections import defaultdict as dd
 from selenium import webdriver as wbd
 from time import sleep
 import pyautogui as pog
-import os
 from selenium.common.exceptions import NoSuchElementException
+from win32com.client import Dispatch
 from horriblefiles.user_preferences import preferences
 
 # Dictionary of web drivers according to browser
@@ -106,3 +111,35 @@ def start_downloads(episodes, driver, path):
         i += 1  # increase number of episodes downloaded
 
     return i
+
+# function to schedule a task
+def schedule(name, description, path, args, times, repetition):
+    # create scheduler
+    scheduler = Dispatch('Schedule.Service')
+    scheduler.connect()
+
+    # define the task and set settings
+    task_def = scheduler.NewTask(0)
+    task_def.RegistrationInfo.Description = description
+    task_def.Settings.Enabled = True
+    task_def.Settings.StopIfGoingOnBatteries = False
+    task_def.Settings.DisallowStartIfOnBatteries = False
+
+    # set triggers for the day's releases
+    for time in times:
+        trigger = task_def.Triggers.Create(repetition)
+        trigger.StartBoundary = time
+
+    # set task to start horrible_downloader
+    action = task_def.Actions.Create(0)
+    action.Path = path
+    action.Arguments = args
+
+    # schedule the task
+    scheduler.GetFolder('\\').RegisterTaskDefinition(
+        name,  # Task name
+        task_def,
+        6,
+        '',  # No user
+        '',  # No password
+        0)
