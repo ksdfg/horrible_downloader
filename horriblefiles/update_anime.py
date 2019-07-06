@@ -1,4 +1,10 @@
 # python script to update your currently watching list
+
+# add horriblehome to sys.path
+import sys
+import os
+sys.path.append(os.path.expandvars('%horriblehome%'))
+
 from horriblefiles.currently_watching import shows
 from bs4 import BeautifulSoup as bs
 import requests
