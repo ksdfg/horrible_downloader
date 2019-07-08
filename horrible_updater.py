@@ -14,7 +14,7 @@ print('Downloaded zip file from the internet.\nExtracting zip file...')
 r = zipfile.ZipFile(io.BytesIO(r.content))  # convert file to zip file
 r.extractall(os.getcwd())   # extract zip file at given path
 print('extracted zip file.')
-src = os.getcwd() + r'\horrible_downloader-master'
+src = os.getcwd() + r'\horrible_downloader'
 dest = os.getcwd()
 
 for src_dir, dirs, files in os.walk(src):

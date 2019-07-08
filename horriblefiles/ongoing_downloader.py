@@ -1,6 +1,10 @@
 # checks and downloads episodes of anime in the currently watching list
 
+# add horriblehome to sys.path
+import sys
 import os
+sys.path.append(os.path.expandvars('%horriblehome%'))
+
 from horriblefiles.currently_watching import shows
 import horriblefiles.horrible_functions as hf
 from horriblefiles.user_preferences import preferences
@@ -10,7 +14,7 @@ from pyautogui import hotkey
 hf.torrent_startup[preferences['torrent']]()
 
 # read the contents of currently watching file
-f = open('horriblefiles/currently_watching.py', 'r+')
+f = open(os.path.relpath(os.path.expandvars('%horriblehome%') + '\horriblefiles\currently_watching.py', os.getcwd()), 'r+')
 cw = f.read()
 f.close()
 
@@ -57,7 +61,7 @@ for i in shows.keys():
 driver.close()  # once you have checked all animes in links, close the web driver
 
 # update the currently watching list
-f = open("horriblefiles/currently_watching.py", "w")
+f = open(os.path.relpath(os.path.expandvars('%horriblehome%') + '\horriblefiles\currently_watching.py', os.getcwd()), "w")
 f.write(cw)
 f.close()
 

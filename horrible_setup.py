@@ -1,9 +1,12 @@
 # file to be run to setup horrible downloader
 import os
+import sys
 
 # install required modules
 os.system('pip install -r horriblefiles\\requirements.txt')
 os.system('taskkill /im "chromedriver.exe" /f')     # kill the chromedriver that doesn't kill itself...
+os.system('setx horriblehome "' + os.getcwd() + '"')    # set path to directory having horrible_downloader as env variable
+sys.path.append(os.getcwd())
 os.system('cls')
 
 import requests
@@ -11,6 +14,11 @@ import re
 import horriblefiles.horrible_functions as hf
 import zipfile
 import io
+from pytz import timezone
+from tzlocal import get_localzone
+from win32com.client import Dispatch
+import sys
+from datetime import datetime as dt, timedelta as td
 
 # take input of what browser to use
 while True:
@@ -31,15 +39,16 @@ while True:
 driver_path = os.path.join(os.getcwd(), 'horriblefiles', 'webdriver')
 if not os.path.exists(driver_path):
     os.mkdir(driver_path)  # if directory doesn't exist, make one
-
-print('Downloading web driver...')
-# download file from github
-win = '64' if 'PROGRAMFILES(X86)' in os.environ else '32'
-r = requests.get(hf.download_driver[browser][0] + (win if browser == 'firefox' else '') + '.zip', stream=True)
-print('Downloaded zip file from the internet.\nExtracting zip file...')
-r = zipfile.ZipFile(io.BytesIO(r.content))  # convert file to zip file
-r.extractall(driver_path)   # extract zip file at given path
-print('extracted zip file.')
+driver_path = os.path.join(os.getcwd(), 'horriblefiles', 'webdriver')
+if not os.path.exists(os.path.join(driver_path, hf.download_driver[browser][1] + '.exe')):
+    print('Downloading web driver...')
+    # download file from github
+    win = '64' if 'PROGRAMFILES(X86)' in os.environ else '32'
+    r = requests.get(hf.download_driver[browser][0] + (win if browser == 'firefox' else '') + '.zip', stream=True)
+    print('Downloaded zip file from the internet.\nExtracting zip file...')
+    r = zipfile.ZipFile(io.BytesIO(r.content))  # convert file to zip file
+    r.extractall(driver_path)   # extract zip file at given path
+    print('extracted zip file.')
 driver_path += '\\' + hf.download_driver[browser][1] + '.exe'    # make driver path be path to driver.exe and return it
 
 # Take input of torrent downloading software used
@@ -92,3 +101,23 @@ os.system('cls')
 print("We're done installing the basic softwares! Now let's make a list of anime you are watching this season :)"
       "\nPlease wait while we bring up the currently watching list updater...")
 import horriblefiles.update_anime
+
+# setup daily scheduling
+tza = timezone('America/Los_Angeles')   # create an instance of timezone in LA
+tzl = get_localzone()                   # create an instance of timezone system is set to
+
+# make a datetime object with today's date and time 00:00:00, then set it's timezone as LA
+zero = tza.localize(dt(dt.today().year, dt.today().month, dt.today().day, 0, 0, 0))
+
+# create datetime object which converts above object into corr. datetime in local timezone
+local_zero = zero.astimezone(tzl).isoformat()
+
+# schedule check
+hf.schedule(
+    name='horrible downloader - daily check scheduler',
+    description="Schedule the day's checks for new episode releases",
+    path='"' + sys.executable.replace('python.exe', 'pythonw.exe') + '"',
+    args='"' + os.path.join(os.getcwd(), 'horriblefiles', 'scheduler.py') + '"',
+    times=[local_zero],
+    repetition=2
+)
