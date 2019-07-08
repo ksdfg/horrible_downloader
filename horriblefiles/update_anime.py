@@ -56,8 +56,7 @@ while True:
         f.close()
 
         # add show to list
-        cw = cw.replace('{', '{\n\tr"' + name + '": [' + ep + ', "' + tags[curr_shows.index(name)].get('href') +
-                        '"]' + (',' if len(shows) != 0 else ''))
+        cw = cw.replace('{', '{\n\tr"' + name + '": ' + ep + (',' if len(shows) != 0 else ''))
         shows[name] = int(ep)
 
         # update the currently watching list
@@ -120,7 +119,7 @@ while True:
         pattern_name = name     # copy of name to be used in the pattern
         for i in special_chars:
             pattern_name = pattern_name.replace(i, '\\'+i)      # add \ to escape special sequence
-        cw = re.sub(pattern_name + '": \[\d+', name + '": [' + ep, cw)
+        cw = re.sub(pattern_name + '": \d+', name + '": ' + ep, cw)
 
         # update the currently watching list
         f = open("horriblefiles/currently_watching.py", "w")
