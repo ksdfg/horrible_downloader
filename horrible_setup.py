@@ -4,7 +4,6 @@ import sys
 
 # install required modules
 os.system('pip install -r horriblefiles\\requirements.txt')
-os.system('taskkill /im "chromedriver.exe" /f')     # kill the chromedriver that doesn't kill itself...
 os.system('setx horriblehome "' + os.getcwd() + '"')    # set path to directory having horrible_downloader as env variable
 sys.path.append(os.getcwd())
 os.system('cls')

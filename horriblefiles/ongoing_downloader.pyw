@@ -11,9 +11,7 @@ from horriblefiles.user_preferences import preferences
 from bs4 import BeautifulSoup as bs
 from requests import get
 import ctypes
-
-# startup procedure for torrent software
-hf.torrent_startup[preferences['torrent']]()
+from pyautogui import getWindowsWithTitle
 
 # read the contents of currently watching file
 f = open(os.path.relpath(os.path.expandvars('%horriblehome%') + '\horriblefiles\currently_watching.py', os.getcwd()), 'r+')
@@ -61,6 +59,12 @@ if len(links) != 0 and ctypes.windll.user32.MessageBoxW(0, "Start downloading ne
     for i in links:
         os.startfile(i['magnet'])
         hf.torrents[preferences['torrent']](i['path'])
+
+        # close qbittorrent if open
+        window = getWindowsWithTitle('qBittorrent')
+        if len(window) > 0:
+            for w in window:
+                w.close()
 
     # update the currently watching list
     f = open(os.path.relpath(os.path.expandvars('%horriblehome%') + '\horriblefiles\currently_watching.py', os.getcwd()), "w")

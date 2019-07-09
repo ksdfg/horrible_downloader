@@ -36,6 +36,7 @@ def qbittorrent_download(path):
     sleep(3)
     pog.press(['\t', '\t', 'up', '\t', '\t'])
     pog.typewrite(path)     # enter path where you want to store the downloaded episode
+    sleep(0.5)
     pog.press(['\t', '\t', '\t', '\t', '\t', '\t', '\t', '\t', '\t', '\t', 'space', 'enter'])
     sleep(2)
 
