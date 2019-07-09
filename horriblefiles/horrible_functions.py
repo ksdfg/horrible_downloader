@@ -11,7 +11,6 @@ from selenium import webdriver as wbd
 from time import sleep
 import pyautogui as pog
 from selenium.common.exceptions import NoSuchElementException
-from win32com.client import Dispatch
 from horriblefiles.user_preferences import preferences
 
 # Dictionary of web drivers according to browser
@@ -37,6 +36,7 @@ def qbittorrent_download(path):
     sleep(3)
     pog.press(['\t', '\t', 'up', '\t', '\t'])
     pog.typewrite(path)     # enter path where you want to store the downloaded episode
+    sleep(0.5)
     pog.press(['\t', '\t', '\t', '\t', '\t', '\t', '\t', '\t', '\t', '\t', 'space', 'enter'])
     sleep(2)
 
@@ -111,35 +111,3 @@ def start_downloads(episodes, driver, path):
         i += 1  # increase number of episodes downloaded
 
     return i
-
-# function to schedule a task
-def schedule(name, description, path, args, times, repetition):
-    # create scheduler
-    scheduler = Dispatch('Schedule.Service')
-    scheduler.connect()
-
-    # define the task and set settings
-    task_def = scheduler.NewTask(0)
-    task_def.RegistrationInfo.Description = description
-    task_def.Settings.Enabled = True
-    task_def.Settings.StopIfGoingOnBatteries = False
-    task_def.Settings.DisallowStartIfOnBatteries = False
-
-    # set triggers for the day's releases
-    for time in times:
-        trigger = task_def.Triggers.Create(repetition)
-        trigger.StartBoundary = time
-
-    # set task to start horrible_downloader
-    action = task_def.Actions.Create(0)
-    action.Path = path
-    action.Arguments = args
-
-    # schedule the task
-    scheduler.GetFolder('\\').RegisterTaskDefinition(
-        name,  # Task name
-        task_def,
-        6,
-        '',  # No user
-        '',  # No password
-        0)

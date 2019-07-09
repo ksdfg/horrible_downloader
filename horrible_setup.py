@@ -4,7 +4,6 @@ import sys
 
 # install required modules
 os.system('pip install -r horriblefiles\\requirements.txt')
-os.system('taskkill /im "chromedriver.exe" /f')     # kill the chromedriver that doesn't kill itself...
 os.system('setx horriblehome "' + os.getcwd() + '"')    # set path to directory having horrible_downloader as env variable
 sys.path.append(os.getcwd())
 os.system('cls')
@@ -14,11 +13,7 @@ import re
 import horriblefiles.horrible_functions as hf
 import zipfile
 import io
-from pytz import timezone
-from tzlocal import get_localzone
-from win32com.client import Dispatch
 import sys
-from datetime import datetime as dt, timedelta as td
 
 # take input of what browser to use
 while True:
@@ -102,22 +97,5 @@ print("We're done installing the basic softwares! Now let's make a list of anime
       "\nPlease wait while we bring up the currently watching list updater...")
 import horriblefiles.update_anime
 
-# setup daily scheduling
-tza = timezone('America/Los_Angeles')   # create an instance of timezone in LA
-tzl = get_localzone()                   # create an instance of timezone system is set to
-
-# make a datetime object with today's date and time 00:00:00, then set it's timezone as LA
-zero = tza.localize(dt(dt.today().year, dt.today().month, dt.today().day, 0, 0, 0))
-
-# create datetime object which converts above object into corr. datetime in local timezone
-local_zero = zero.astimezone(tzl).isoformat()
-
-# schedule check
-hf.schedule(
-    name='horrible downloader - daily check scheduler',
-    description="Schedule the day's checks for new episode releases",
-    path='"' + sys.executable.replace('python.exe', 'pythonw.exe') + '"',
-    args='"' + os.path.join(os.getcwd(), 'horriblefiles', 'scheduler.py') + '"',
-    times=[local_zero],
-    repetition=2
-)
+# schedule check of ongoing series
+os.system(r'schtasks /create /sc minute /mo 15 /tn "horribletasks\check currently watching" /tr "\"' + sys.executable.replace('python.exe', 'pythonw.exe') + r'\" \"' + os.getcwd() + r'\horriblefiles\ongoing_downloader.pyw\""')

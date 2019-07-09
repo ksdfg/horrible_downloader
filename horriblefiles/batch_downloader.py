@@ -95,6 +95,7 @@ for i in range(len(episodes)):
         break
 
 episodes = episodes[end_ind: start_ind+1]   # list of all eps we need to download
+episodes.reverse()
 
 # define path where episode is to be downloaded
 path = preferences['download_path'] + name
