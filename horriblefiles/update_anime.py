@@ -15,6 +15,9 @@ import re
 tags = bs(requests.get("https://horriblesubs.info/release-schedule/").text,
           features='html.parser').select('a[title = "See all releases for this show"]')
 curr_shows = list(map(lambda x: x.text.replace('[email protected]', 'iDOLM@STER'), tags))
+for i in range(len(curr_shows)):
+    if curr_shows[i].find(chr(8211)) != -1:
+        curr_shows[i] = curr_shows[i].replace(chr(8211), chr(45))
 
 special_chars = ['+', '*', '.', '|', '(', ')', '$', '[', ']']  # set of all special chars in patterns
 
@@ -34,7 +37,7 @@ while True:
 
         name = input('\nEnter name of anime as written in the schedule of horriblesubs.info'
                      '\nLink to schedule - https://horriblesubs.info/release-schedule/'
-                     '\nName : ')
+                     '\nName : ').replace(chr(8211), chr(45))
 
         if name not in curr_shows:
             print('This anime cannot be found in the schedule')
@@ -69,7 +72,7 @@ while True:
     elif choice == '2':
         name = input('\nEnter name of anime as written in the schedule of horriblesubs.info'
                      '\nLink to schedule - https://horriblesubs.info/release-schedule/'
-                     '\nName : ')
+                     '\nName : ').replace(chr(8211), chr(45))
 
         try:
             # read the contents of currently watching file
@@ -98,7 +101,7 @@ while True:
     elif choice == '3':
         name = input('\nEnter name of anime as written in the schedule of horriblesubs.info'
                      '\nLink to schedule - https://horriblesubs.info/release-schedule/'
-                     '\nName : ')
+                     '\nName : ').replace(chr(8211), chr(45))
 
         if name not in shows.keys():
             print('This anime cannot be found in your currently watching list T-T')
