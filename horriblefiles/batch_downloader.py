@@ -16,12 +16,15 @@ from pyautogui import hotkey
 tags = bs(requests.get("https://horriblesubs.info/shows/").text,
           features='html.parser').select('div [class = "ind-show"] > a')
 all_shows = list(map(lambda x: x.text.replace('[email protected]', 'iDOLM@STER'),tags))
+for i in range(len(all_shows)):
+    if all_shows[i].find(chr(8211)) != -1:
+        all_shows[i] = all_shows[i].replace(chr(8211), chr(45))
 
 # Take name of anime to download and validate
 while True:
     name = input('\nEnter name of anime as written in the show library of horriblesubs.info'
                  '\nLink to show library - https://horriblesubs.info/shows/'
-                 '\nName : ')
+                 '\nName : ').replace(chr(8211), chr(45))
 
     if name not in all_shows:
         print('This anime cannot be found in the horriblesubs.info library')
