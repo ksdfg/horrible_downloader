@@ -55,6 +55,6 @@ horrible downloader is very simple to use! You simply need to run `horrible_down
 
 ## Scheduled Checks
 
-Every 15 minutes, horrible downloader checks to see if any new episodes of the anime in your currently watching list have been released. If they have, a popup appears which asks if you want to start the downloads. The checks occur in the background and won't disturb your day-to-day usage of your pc. This way you will be able to download new episodes as soon as you can!<br/><br/>
+Every 15 minutes, horrible downloader checks to see if any new episodes of the anime in your currently watching list have been released. If they have, a popup appears which asks if you want to start the downloads. The checks occur in the background and won't disturb your day-to-day usage of your pc. This way you will be able to download new episodes as soon as you can! If the check does find new episodes to download, then it will create a popup that asks if you want to start downloads now and then wait for 1 minute. If you do not press okay in 1 minute then it will cancel the download.<br/><br/>
 
 <hr />
