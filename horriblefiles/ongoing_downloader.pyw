@@ -12,6 +12,8 @@ from bs4 import BeautifulSoup as bs
 from requests import get
 import ctypes
 from pyautogui import getWindowsWithTitle
+from threading import Thread
+from time import sleep
 
 # read the contents of currently watching file
 f = open(os.path.relpath(os.path.expandvars('%horriblehome%') + '\horriblefiles\currently_watching.py', os.getcwd()), 'r+')
@@ -54,22 +56,33 @@ for i in shows.keys():
 
     print('Up to date :)\n')
 
-if len(links) != 0 and ctypes.windll.user32.MessageBoxW(0, "Start downloading new episodes?", "horrible downloader", 0x1001) == 1:
+if len(links) != 0:
+    i = -1
 
-    for i in links:
-        os.startfile(i['magnet'])
-        hf.torrents[preferences['torrent']](i['path'])
+    def meow():    # function to thread - wait for 1 minute, then start check
+        sleep(60)
+        if i==-1:
+            getWindowsWithTitle('horrible downloader')[0].close()
 
-        # close qbittorrent if open
-        window = getWindowsWithTitle('qBittorrent')
-        if len(window) > 0:
-            for w in window:
-                w.close()
+    t = Thread(target=meow)
+    t.start()    
 
-    # update the currently watching list
-    f = open(os.path.relpath(os.path.expandvars('%horriblehome%') + '\horriblefiles\currently_watching.py', os.getcwd()), "w")
-    f.write(cw)
-    f.close()
+    if ctypes.windll.user32.MessageBoxW(0, "Start downloading new episodes?", "horrible downloader", 0x1001) == 1:
 
-    # Give the user time to read status report
-    ctypes.windll.user32.MessageBoxW(0, "finished downloading all possible episodes :)", "horrible downloader", 0x1000)  # popup
+        for i in links:
+            os.startfile(i['magnet'])
+            hf.torrents[preferences['torrent']](i['path'])
+
+            # close qbittorrent if open
+            window = getWindowsWithTitle('qBittorrent')
+            if len(window) > 0:
+                for w in window:
+                    w.close()
+
+        # update the currently watching list
+        f = open(os.path.relpath(os.path.expandvars('%horriblehome%') + '\horriblefiles\currently_watching.py', os.getcwd()), "w")
+        f.write(cw)
+        f.close()
+
+        # Give the user time to read status report
+        ctypes.windll.user32.MessageBoxW(0, "finished downloading all possible episodes :)", "horrible downloader", 0x1000)  # popup
