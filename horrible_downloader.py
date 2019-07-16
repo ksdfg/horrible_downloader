@@ -10,7 +10,7 @@ if choice == '4':
     exit(0)
 
 elif choice == '1':
-    print('\nStarting checks...')
+    print('\nStarting checks...\n')
     import horriblefiles.ongoing_downloader
 
 elif choice == '2':

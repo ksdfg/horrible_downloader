@@ -1,9 +1,11 @@
 # file to be run to setup horrible downloader
 import os
+import sys
 
 # install required modules
 os.system('pip install -r horriblefiles\\requirements.txt')
-os.system('taskkill /im "chromedriver.exe" /f')     # kill the chromedriver that doesn't kill itself...
+os.system('setx horriblehome "' + os.getcwd() + '"')    # set path to directory having horrible_downloader as env variable
+sys.path.append(os.getcwd())
 os.system('cls')
 
 import requests
@@ -11,6 +13,7 @@ import re
 import horriblefiles.horrible_functions as hf
 import zipfile
 import io
+import sys
 
 # take input of what browser to use
 while True:
@@ -31,15 +34,16 @@ while True:
 driver_path = os.path.join(os.getcwd(), 'horriblefiles', 'webdriver')
 if not os.path.exists(driver_path):
     os.mkdir(driver_path)  # if directory doesn't exist, make one
-
-print('Downloading web driver...')
-# download file from github
-win = '64' if 'PROGRAMFILES(X86)' in os.environ else '32'
-r = requests.get(hf.download_driver[browser][0] + (win if browser == 'firefox' else '') + '.zip', stream=True)
-print('Downloaded zip file from the internet.\nExtracting zip file...')
-r = zipfile.ZipFile(io.BytesIO(r.content))  # convert file to zip file
-r.extractall(driver_path)   # extract zip file at given path
-print('extracted zip file.')
+driver_path = os.path.join(os.getcwd(), 'horriblefiles', 'webdriver')
+if not os.path.exists(os.path.join(driver_path, hf.download_driver[browser][1] + '.exe')):
+    print('Downloading web driver...')
+    # download file from github
+    win = '64' if 'PROGRAMFILES(X86)' in os.environ else '32'
+    r = requests.get(hf.download_driver[browser][0] + (win if browser == 'firefox' else '') + '.zip', stream=True)
+    print('Downloaded zip file from the internet.\nExtracting zip file...')
+    r = zipfile.ZipFile(io.BytesIO(r.content))  # convert file to zip file
+    r.extractall(driver_path)   # extract zip file at given path
+    print('extracted zip file.')
 driver_path += '\\' + hf.download_driver[browser][1] + '.exe'    # make driver path be path to driver.exe and return it
 
 # Take input of torrent downloading software used
@@ -92,3 +96,6 @@ os.system('cls')
 print("We're done installing the basic softwares! Now let's make a list of anime you are watching this season :)"
       "\nPlease wait while we bring up the currently watching list updater...")
 import horriblefiles.update_anime
+
+# schedule check of ongoing series
+os.system(r'schtasks /create /sc minute /mo 15 /tn "horribletasks\check currently watching" /tr "\"' + sys.executable.replace('python.exe', 'pythonw.exe') + r'\" \"' + os.getcwd() + r'\horriblefiles\ongoing_downloader.pyw\""')
