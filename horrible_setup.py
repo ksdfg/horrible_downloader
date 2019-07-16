@@ -34,7 +34,6 @@ while True:
 driver_path = os.path.join(os.getcwd(), 'horriblefiles', 'webdriver')
 if not os.path.exists(driver_path):
     os.mkdir(driver_path)  # if directory doesn't exist, make one
-driver_path = os.path.join(os.getcwd(), 'horriblefiles', 'webdriver')
 if not os.path.exists(os.path.join(driver_path, hf.download_driver[browser][1] + '.exe')):
     print('Downloading web driver...')
     # download file from github

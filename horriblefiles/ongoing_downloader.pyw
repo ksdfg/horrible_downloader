@@ -67,7 +67,7 @@ if len(links) != 0:
     t = Thread(target=meow)
     t.start()    
 
-    if ctypes.windll.user32.MessageBoxW(0, "Start downloading new episodes?", "horrible downloader", 0x1001) == 1:
+    if ctypes.windll.user32.MessageBoxW(0, "Start downloading new episodes?", "horrible downloader", 0x1000) == 1:
 
         for i in links:
             os.startfile(i['magnet'])
