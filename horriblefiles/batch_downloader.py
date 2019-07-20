@@ -1,10 +1,14 @@
 # python script to update your currently watching list
+
+# add horriblehome to sys.path
+import sys
 import os
+sys.path.append(os.path.expandvars('%horriblehome%'))
+
 from bs4 import BeautifulSoup as bs
 import requests
 import horriblefiles.horrible_functions as hf
 from horriblefiles.user_preferences import preferences
-from selenium.common.exceptions import NoSuchElementException
 from pyautogui import hotkey
 
 # get a list of ALL shows available on horriblesubs.info
@@ -12,12 +16,15 @@ from pyautogui import hotkey
 tags = bs(requests.get("https://horriblesubs.info/shows/").text,
           features='html.parser').select('div [class = "ind-show"] > a')
 all_shows = list(map(lambda x: x.text.replace('[email protected]', 'iDOLM@STER'),tags))
+for i in range(len(all_shows)):
+    if all_shows[i].find(chr(8211)) != -1:
+        all_shows[i] = all_shows[i].replace(chr(8211), chr(45))
 
 # Take name of anime to download and validate
 while True:
     name = input('\nEnter name of anime as written in the show library of horriblesubs.info'
                  '\nLink to show library - https://horriblesubs.info/shows/'
-                 '\nName : ')
+                 '\nName : ').replace(chr(8211), chr(45))
 
     if name not in all_shows:
         print('This anime cannot be found in the horriblesubs.info library')
@@ -30,7 +37,7 @@ print('\nOpening', name, 'in web driver...')
 
 # open a web driver according to browser preference
 driver = hf.drivers[preferences['browser']](executable_path=preferences['driver_path'])
-driver.implicitly_wait(10)  # make driver inherently wait for 10s after opening a page
+# driver.implicitly_wait(10)  # make driver inherently wait for 10s after opening a page
 os.system('cls')
 
 # parse html source of horriblesubs.info shows page
@@ -69,22 +76,9 @@ while True:
             end = '0' + end
         break
 
-# press show more till we can see the start episode
+# Create smallest list of all episode numbers that includes given episode
 print('\nGetting list of episodes of', name, '...')
-while True:
-    try:
-        driver.find_element_by_xpath('//*[@id="' + start + '"]')
-        break   # if we can find start, it'll break from loop
-
-    except NoSuchElementException:  # Thrown if driver can't find start
-
-        try:
-            driver.find_element_by_xpath('//*[@class="show-more"]/a').click()   # click on "show more" button
-        except NoSuchElementException:  # Thrown if there's no more to show
-            break
-
-# Create a list of all episode numbers visible
-episodes = list(map(lambda x: x.get_attribute('id'), driver.find_elements_by_xpath('//*[@class="hs-shows"]/div')))
+episodes = hf.get_episode_list(driver, start)
 
 if start == '00':
     start = episodes[-1]    # set starting episode to first ep released in horrible
@@ -104,6 +98,7 @@ for i in range(len(episodes)):
         break
 
 episodes = episodes[end_ind: start_ind+1]   # list of all eps we need to download
+episodes.reverse()
 
 # define path where episode is to be downloaded
 path = preferences['download_path'] + name
@@ -114,30 +109,13 @@ if not os.path.exists(path):
 hf.torrent_startup[preferences['torrent']]()
 
 # loop to start all downloads
-for ep in episodes:
-    try:
-        print('\nstarting to download ep', ep)
-        # open magnet link of ep in preferred quality of user
-        os.startfile(
-            driver.find_element_by_xpath(
-                '//*[@id="' + ep + '-' + preferences['quality'] + '"]/span[2]/a').get_attribute
-            ('href')
-        )
-    except NoSuchElementException:  # thrown if no magnet link of required quality found
-        print("No Download link for episode", ep, preferences['quality'], "T-T")
-        continue
-
-    # start downloading torrent from your preferred software
-    hf.torrents[preferences['torrent']](path)
-
-    # give confirmation message to user on terminal
-    print("Downloading episode", ep, "now :)")
+print('\nStarting downloads...\n')
+hf.start_downloads(episodes, driver, path)
 
 driver.close()  # once you have checked all animes in links, close the web driver
 
 # Give the user time to read status report
-print('\nPress enter to quit! :)')
-input()
+input('\nPress enter to quit! :)')
 
 # kill the chromedriver that doesn't kill itself...
 os.system('taskkill /im "chromedriver.exe" /f')

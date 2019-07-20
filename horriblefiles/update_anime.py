@@ -1,4 +1,10 @@
 # python script to update your currently watching list
+
+# add horriblehome to sys.path
+import sys
+import os
+sys.path.append(os.path.expandvars('%horriblehome%'))
+
 from horriblefiles.currently_watching import shows
 from bs4 import BeautifulSoup as bs
 import requests
@@ -9,6 +15,9 @@ import re
 tags = bs(requests.get("https://horriblesubs.info/release-schedule/").text,
           features='html.parser').select('a[title = "See all releases for this show"]')
 curr_shows = list(map(lambda x: x.text.replace('[email protected]', 'iDOLM@STER'), tags))
+for i in range(len(curr_shows)):
+    if curr_shows[i].find(chr(8211)) != -1:
+        curr_shows[i] = curr_shows[i].replace(chr(8211), chr(45))
 
 special_chars = ['+', '*', '.', '|', '(', ')', '$', '[', ']']  # set of all special chars in patterns
 
@@ -16,10 +25,10 @@ special_chars = ['+', '*', '.', '|', '(', ')', '$', '[', ']']  # set of all spec
 while True:
     print('\n1. Add anime to currently watching list\t(type 1 to select this)'
           '\n2. Remove anime from currently watching\t(type 2 to select this)'
-          '\n3. Change next episode to download of anime in currently watching list\t(type 3 to select this)'
+          '\n3. Change episode to start downloading from of anime in currently watching list\t(type 3 to select this)'
           '\n4. Clear currently watching list\t(type 4 to select this)'
           '\n5. Exit\t(type 5 to select this)')     # printing options
-    choice = input('Choice : ')
+    choice = input('\nChoice : ')
 
     if choice == '5':   # user wants to exit
         break
@@ -28,7 +37,7 @@ while True:
 
         name = input('\nEnter name of anime as written in the schedule of horriblesubs.info'
                      '\nLink to schedule - https://horriblesubs.info/release-schedule/'
-                     '\nName : ')
+                     '\nName : ').replace(chr(8211), chr(45))
 
         if name not in curr_shows:
             print('This anime cannot be found in the schedule')
@@ -38,7 +47,7 @@ while True:
             print('You are already watching this show!')
             continue
 
-        ep = input('Which episode to download next time you run horrible downloader? ')
+        ep = input('Which episode to start downloading from next time you run horrible downloader? ')
         # check if input is valid
         if not ep.isdecimal() or int(ep) < 1:
             print('This is not a valid episode number.')
@@ -50,8 +59,7 @@ while True:
         f.close()
 
         # add show to list
-        cw = cw.replace('{', '{\n\tr"' + name + '": [' + ep + ', "' + tags[curr_shows.index(name)].get('href') +
-                        '"]' + (',' if len(shows) != 0 else ''))
+        cw = cw.replace('{', '{\n\tr"' + name + '": ' + ep + (',' if len(shows) != 0 else ''))
         shows[name] = int(ep)
 
         # update the currently watching list
@@ -64,7 +72,7 @@ while True:
     elif choice == '2':
         name = input('\nEnter name of anime as written in the schedule of horriblesubs.info'
                      '\nLink to schedule - https://horriblesubs.info/release-schedule/'
-                     '\nName : ')
+                     '\nName : ').replace(chr(8211), chr(45))
 
         try:
             # read the contents of currently watching file
@@ -93,13 +101,13 @@ while True:
     elif choice == '3':
         name = input('\nEnter name of anime as written in the schedule of horriblesubs.info'
                      '\nLink to schedule - https://horriblesubs.info/release-schedule/'
-                     '\nName : ')
+                     '\nName : ').replace(chr(8211), chr(45))
 
         if name not in shows.keys():
             print('This anime cannot be found in your currently watching list T-T')
             continue
 
-        ep = input('Which episode to download next time you run horrible downloader? ')
+        ep = input('Which episode to start downloading from next time you run horrible downloader? ')
         # check if input is valid
         if not ep.isdecimal() or int(ep) < 1:
             print('This is not a valid episode number.')
@@ -114,7 +122,7 @@ while True:
         pattern_name = name     # copy of name to be used in the pattern
         for i in special_chars:
             pattern_name = pattern_name.replace(i, '\\'+i)      # add \ to escape special sequence
-        cw = re.sub(pattern_name + '": \[\d+', name + '": [' + ep, cw)
+        cw = re.sub(pattern_name + '": \d+', name + '": ' + ep, cw)
 
         # update the currently watching list
         f = open("horriblefiles/currently_watching.py", "w")
