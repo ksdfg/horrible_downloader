@@ -22,23 +22,28 @@ drivers = {
 
 # Function for when magnet link is opened in utorrent
 def utorrent_download(path):
-    sleep(3)
+    while True:
+        if pog.getWindowsWithTitle('[HorribleSubs]'):
+            break
+        sleep(0.2)
     pog.typewrite(path)     # enter path where you want to store the downloaded episode
     pog.press('enter')
     pog.press('enter')
     # close torrent software so focus is switched to web driver again for next anime
-    pog.hotkey('alt', 'f4')
-    sleep(2)
+    sleep(1)
 
 
 # Function for when magnet link is opened in qbittorrent
 def qbittorrent_download(path):
-    sleep(3)
+    while True:
+        if pog.getWindowsWithTitle('Magnet Link'):
+            break
+        sleep(0.2)
     pog.press(['\t', '\t', 'up', '\t', '\t'])
     pog.typewrite(path)     # enter path where you want to store the downloaded episode
     sleep(0.5)
     pog.press(['\t', '\t', '\t', '\t', '\t', '\t', '\t', '\t', '\t', '\t', 'space', 'enter'])
-    sleep(2)
+    sleep(1)
 
 
 # dictionary to decide which function should be called to start torrent download
@@ -58,8 +63,11 @@ download_driver = {
 # function to startup qbittorrent in the beginning
 def qbittorrent_startup():
     os.startfile(r"C:\Program Files\qBittorrent\qbittorrent.exe")
-    sleep(5)
-    pog.hotkey('alt', 'f4')
+    while True:
+        if pog.getWindowsWithTitle('qBittorrent'):
+            pog.getWindowsWithTitle('qBittorrent')[0].close()
+            break
+        sleep(0.2)
 
 
 # default dictionary that returns the startup functions of torrenting softwares
@@ -109,5 +117,11 @@ def start_downloads(episodes, driver, path):
         print("Downloading episode", ep, "now :)")
 
         i += 1  # increase number of episodes downloaded
+
+    # close μTorrent
+    window = pog.getWindowsWithTitle('μTorrent')
+    if len(window) > 0:
+        for w in window:
+            w.close()
 
     return i

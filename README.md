@@ -33,7 +33,7 @@ Automatically download all episodes of the currently airing anime that you are w
   - Search which file is associated with .torrent<br/><br/>
 - Next, the installer should ask you where you want to store your downloaded anime. Copy & paste the path to the folder where you want it to save the downloaded episodes.
   - If you copy something, you can paste it on the terminal by just clicking `right click` on your mouse<br/><br/>
-- Next, the installer should ask you what quality you want the downloaded episodes to be in. Do not foget the `p` when typing your answer!<br/><br/>
+- Next, the installer should ask you what quality you want the downloaded episodes to be in. Do not forget the `p` when typing your answer!<br/><br/>
   
 We have finished installing the software with your preferences! Now all we need to do is make a list of the currently ongoing anime that horrible downloader will check for new episodes each time you run it. Wait for the menu to come up, and from then on it's an easy and intuitive process where you can add anime to your list, remove anime from your list, change the episode from which downloads will start next time of an anime already in your list or clear your currently watching.
 
@@ -55,6 +55,6 @@ horrible downloader is very simple to use! You simply need to run `horrible_down
 
 ## Scheduled Checks
 
-Every 15 minutes, horrible downloader checks to see if any new episodes of the anime in your currently watching list have been released. If they have, a popup appears which asks if you want to start the downloads. The checks occur in the background and won't disturb your day-to-day usage of your pc. This way you will be able to download new episodes as soon as you can!<br/><br/>
+Every 15 minutes, horrible downloader checks to see if any new episodes of the anime in your currently watching list have been released. If they have, a popup appears which asks if you want to start the downloads. The checks occur in the background and won't disturb your day-to-day usage of your pc. This way you will be able to download new episodes as soon as you can! If the check does find new episodes to download, then it will create a popup that asks if you want to start downloads now and then wait for 1 minute. If you do not press okay in 1 minute then it will cancel the download.<br/><br/>
 
 <hr />

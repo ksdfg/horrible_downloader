@@ -61,7 +61,7 @@ if len(links) != 0:
 
     def meow():    # function to thread - wait for 1 minute, then start check
         sleep(60)
-        if i==-1:
+        if i == -1:
             getWindowsWithTitle('horrible downloader')[0].close()
 
     t = Thread(target=meow)
@@ -69,12 +69,21 @@ if len(links) != 0:
 
     if ctypes.windll.user32.MessageBoxW(0, "Start downloading new episodes?", "horrible downloader", 0x1000) == 1:
 
+        # startup procedure for torrent software
+        hf.torrent_startup[preferences['torrent']]()
+
         for i in links:
             os.startfile(i['magnet'])
             hf.torrents[preferences['torrent']](i['path'])
 
             # close qbittorrent if open
             window = getWindowsWithTitle('qBittorrent')
+            if len(window) > 0:
+                for w in window:
+                    w.close()
+
+            # close μTorrent
+            window = getWindowsWithTitle('μTorrent')
             if len(window) > 0:
                 for w in window:
                     w.close()
