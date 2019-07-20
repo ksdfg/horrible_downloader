@@ -33,12 +33,15 @@ def utorrent_download(path):
 
 # Function for when magnet link is opened in qbittorrent
 def qbittorrent_download(path):
-    sleep(3)
+    while True:
+        if pog.getWindowsWithTitle('Magnet Link'):
+            break;
+        sleep(0.2)
     pog.press(['\t', '\t', 'up', '\t', '\t'])
     pog.typewrite(path)     # enter path where you want to store the downloaded episode
     sleep(0.5)
     pog.press(['\t', '\t', '\t', '\t', '\t', '\t', '\t', '\t', '\t', '\t', 'space', 'enter'])
-    sleep(2)
+    sleep(1)
 
 
 # dictionary to decide which function should be called to start torrent download
@@ -58,8 +61,11 @@ download_driver = {
 # function to startup qbittorrent in the beginning
 def qbittorrent_startup():
     os.startfile(r"C:\Program Files\qBittorrent\qbittorrent.exe")
-    sleep(5)
-    pog.hotkey('alt', 'f4')
+    while True:
+        if pog.getWindowsWithTitle('qBittorrent'):
+            pog.getWindowsWithTitle('qBittorrent')[0].close()
+            break;
+        sleep(0.2)
 
 
 # default dictionary that returns the startup functions of torrenting softwares

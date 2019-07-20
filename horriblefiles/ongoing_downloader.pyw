@@ -69,6 +69,9 @@ if len(links) != 0:
 
     if ctypes.windll.user32.MessageBoxW(0, "Start downloading new episodes?", "horrible downloader", 0x1001) == 1:
 
+        # startup procedure for torrent software
+        hf.torrent_startup[preferences['torrent']]()
+
         for i in links:
             os.startfile(i['magnet'])
             hf.torrents[preferences['torrent']](i['path'])
