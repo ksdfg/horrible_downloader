@@ -82,6 +82,12 @@ if len(links) != 0:
                 for w in window:
                     w.close()
 
+            # close μTorrent
+            window = getWindowsWithTitle('μTorrent')
+            if len(window) > 0:
+                for w in window:
+                    w.close()
+
         # update the currently watching list
         f = open(os.path.relpath(os.path.expandvars('%horriblehome%') + '\horriblefiles\currently_watching.py', os.getcwd()), "w")
         f.write(cw)

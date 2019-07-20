@@ -22,20 +22,22 @@ drivers = {
 
 # Function for when magnet link is opened in utorrent
 def utorrent_download(path):
-    sleep(3)
+    while True:
+        if pog.getWindowsWithTitle('[HorribleSubs]'):
+            break
+        sleep(0.2)
     pog.typewrite(path)     # enter path where you want to store the downloaded episode
     pog.press('enter')
     pog.press('enter')
     # close torrent software so focus is switched to web driver again for next anime
-    pog.hotkey('alt', 'f4')
-    sleep(2)
+    sleep(1)
 
 
 # Function for when magnet link is opened in qbittorrent
 def qbittorrent_download(path):
     while True:
         if pog.getWindowsWithTitle('Magnet Link'):
-            break;
+            break
         sleep(0.2)
     pog.press(['\t', '\t', 'up', '\t', '\t'])
     pog.typewrite(path)     # enter path where you want to store the downloaded episode
@@ -64,7 +66,7 @@ def qbittorrent_startup():
     while True:
         if pog.getWindowsWithTitle('qBittorrent'):
             pog.getWindowsWithTitle('qBittorrent')[0].close()
-            break;
+            break
         sleep(0.2)
 
 
@@ -115,5 +117,11 @@ def start_downloads(episodes, driver, path):
         print("Downloading episode", ep, "now :)")
 
         i += 1  # increase number of episodes downloaded
+
+    # close μTorrent
+    window = pog.getWindowsWithTitle('μTorrent')
+    if len(window) > 0:
+        for w in window:
+            w.close()
 
     return i
