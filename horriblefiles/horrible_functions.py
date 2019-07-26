@@ -12,6 +12,7 @@ from time import sleep
 import pyautogui as pog
 from selenium.common.exceptions import NoSuchElementException
 from horriblefiles.user_preferences import preferences
+from re import compile
 
 # Dictionary of web drivers according to browser
 drivers = {
@@ -23,7 +24,7 @@ drivers = {
 # Function for when magnet link is opened in utorrent
 def utorrent_download(path):
     while True:
-        if pog.getWindowsWithTitle('[HorribleSubs]') or pog.getWindowsWithTitle('magnet ('):
+        if pog.getWindowsWithTitle('Add New Torrent'):
             break
         sleep(0.2)
     pog.typewrite(path)     # enter path where you want to store the downloaded episode

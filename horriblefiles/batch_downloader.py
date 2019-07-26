@@ -112,7 +112,7 @@ hf.torrent_startup[preferences['torrent']]()
 print('\nStarting downloads...\n')
 hf.start_downloads(episodes, driver, path)
 
-driver.close()  # once you have checked all animes in links, close the web driver
+driver.close()  # once you have checked all links, close the web driver
 
 # Give the user time to read status report
 input('\nPress enter to quit! :)')
