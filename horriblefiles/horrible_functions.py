@@ -23,7 +23,7 @@ drivers = {
 # Function for when magnet link is opened in utorrent
 def utorrent_download(path):
     while True:
-        if pog.getWindowsWithTitle('[HorribleSubs]'):
+        if pog.getWindowsWithTitle('[HorribleSubs]') or pog.getWindowsWithTitle('magnet ('):
             break
         sleep(0.2)
     pog.typewrite(path)     # enter path where you want to store the downloaded episode
