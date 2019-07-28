@@ -1,4 +1,4 @@
-# python script to update your currently watching list
+# python script to download a batch of episodes
 
 # add horriblehome to sys.path
 import sys
