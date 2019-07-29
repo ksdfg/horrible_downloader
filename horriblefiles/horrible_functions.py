@@ -7,15 +7,11 @@ import os
 sys.path.append(os.path.expandvars('%horriblehome%'))
 
 from collections import defaultdict as dd
-from selenium import webdriver as wbd
 from time import sleep
 import pyautogui as pog
-
-# Dictionary of web drivers according to browser
-drivers = {
-    'firefox': wbd.Firefox,
-    'chrome': wbd.Chrome
-}
+import requests
+from bs4 import BeautifulSoup as bs
+import re
 
 
 # Function for when magnet link is opened in utorrent
@@ -64,3 +60,18 @@ def qbittorrent_startup():
 # default dictionary that returns the startup functions of torrenting softwares
 torrent_startup = dd(lambda: lambda: None)
 torrent_startup['qbittorrent'] = qbittorrent_startup
+
+
+def getEpisode(name, order):
+    soup = bs(requests.get('https://nyaa.si/user/HorribleSubs?f=0&c=1_2&q=' + name.replace(' ', '+') +
+                           '+720p' + '&s=id&o=' + order).text, features='html.parser')
+    # get name of first ep released
+    ep = -1
+    epNames = soup.select('tr.success > td:nth-child(2)')
+    for epName in epNames:
+        title = [i.text for i in epName.findChildren('a') if not i.findChild('i')][0]
+        if re.findall('\[HorribleSubs\] '+name+' - \d+.* \[.+\]\.mkv', title):
+            # get the ep number from that name
+            ep = int(re.compile('\d+').findall(re.compile(' - \d+.* \[').findall(title)[0])[0])
+            break
+    return ep

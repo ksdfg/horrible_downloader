@@ -9,7 +9,6 @@ sys.path.append(os.path.expandvars('%horriblehome%'))
 from bs4 import BeautifulSoup as bs
 import requests
 from horriblefiles.user_preferences import preferences
-import re
 import horriblefiles.horrible_functions as hf
 from pyautogui import getWindowsWithTitle
 
@@ -43,18 +42,8 @@ while True:
     if int(start) < 0:
         print("Invalid episode number")
     elif start == '0':  # get first episode released
-        soup = bs(requests.get('https://nyaa.si/user/HorribleSubs?f=0&c=1_2&q=' + name.replace(' ', '+') +
-                               '+' + preferences['quality'] + '&s=id&o=asc').text, features='html.parser')
-        # get name of first ep released
-        epNames = soup.select('tr.success > td:nth-child(2)')
-        for epName in epNames:
-            title = [i.text for i in epName.findChildren('a') if not i.findChild('i')][0]
-            print(title)
-            if re.match('[HorribleSubs] '+name+' - \d+ [.+].mkv', title):
-                # get the ep number from that name
-                start = int(re.compile(' - \d+ \[').findall(title)[0].replace(' - ', '').replace(' [', ''))
-                print(start)
-                break
+        start = hf.getEpisode(name, 'asc')
+        break
     else:
         # check if ep exists
         soup = bs(requests.get('https://nyaa.si/user/HorribleSubs?f=0&c=1_2&q=' + name.replace(' ', '+') + '+' + start +
@@ -71,13 +60,7 @@ while True:
     if int(end) < 0:
         print("Invalid episode number")
     elif end == '0':  # get last episode released
-        soup = bs(requests.get('https://nyaa.si/user/HorribleSubs?f=0&c=1_2&q=' + name.replace(' ', '+') +
-                               '+' + preferences['quality'] + '&s=id&o=desc').text, features='html.parser')
-        # get name of last ep released
-        epName = soup.select_one('tr.success:nth-child(1) > td:nth-child(2) > a:nth-child(1)').text
-        # get the ep number from that name
-        end = int(re.compile(' - \d+ \[').findall(epName)[0].replace(' - ', '').replace(' [', ''))
-        print(end)
+        end = hf.getEpisode(name, 'desc')
         break
     else:
         # check if ep exists
