@@ -46,11 +46,14 @@ while True:
         soup = bs(requests.get('https://nyaa.si/user/HorribleSubs?f=0&c=1_2&q=' + name.replace(' ', '+') +
                                '+' + preferences['quality'] + '&s=id&o=asc').text, features='html.parser')
         # get name of first ep released
-        epName = soup.select_one('tr.success:nth-child(1) > td:nth-child(2) > a:nth-child(1)').text
-        # get the ep number from that name
-        start = int(re.compile(' - \d+ \[').findall(epName)[0].replace(' - ', '').replace(' [', ''))
-        print(start)
-        break
+        epNames = soup.select('tr.success > td:nth-child(2)')
+        for epName in epNames:
+            title = [i.text for i in epName.findChildren('a') if not i.findChild('i')][0]
+            if re.match('[HorribleSubs] '+name+' - \d+ [.+].mkv', title):
+                # get the ep number from that name
+                start = int(re.compile(' - \d+ \[').findall(title)[0].replace(' - ', '').replace(' [', ''))
+                print(start)
+                break
     else:
         # check if ep exists
         soup = bs(requests.get('https://nyaa.si/user/HorribleSubs?f=0&c=1_2&q=' + name.replace(' ', '+') + '+' + start +

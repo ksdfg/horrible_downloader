@@ -28,6 +28,7 @@ links = []
 for i in shows.keys():
 
     print(i)  # print name of anime you are checking
+    print(float(shows[i])-0.5)
 
     # var that stores which episode you are trying to download
     ep = str(shows[i])
