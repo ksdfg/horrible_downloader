@@ -12,10 +12,7 @@ Automatically download all episodes of the currently airing anime that you are w
 - ***Python 3 and above***<br/>
     Link to download of installation file : https://www.python.org/downloads/<br/>
     While installing, before clicking on `Install Now` option, make sure to select the `Add Python to path` option given below.
-    
-- ***Mozilla Firefox or Google Chrome***<br/>
-    horrible downloader requires one of the above two browsers to be installed on your system. We are working to enable batch downloads without having to open any browsers, but for now having one of these is essential.
-
+ 
 - ***uTorrent or qBitTorrent***<br/>
     Using horrible downloader, you will be able to not only open magnet links but also automatically start their downloads in your default software! At this moment horrible downloader supports uTorrent and qBitTorrent, so ensure one of these two is associated with torrents in your system.
 
@@ -26,7 +23,6 @@ Automatically download all episodes of the currently airing anime that you are w
 - First ensure that you have all the pre-requisite softwares.<br/><br/>
 - Download horrible_downloader.zip from the releases tab. Unzip it in any directory on your computer.<br/><br/>
 - Run the `horrible_setup.py` by double clicking it file to start the installation process. Wait for the installer to install the required Python modules in your computer. This could take a while.<br/><br/>
-- When the installer shows you a prompt to tell it which browser out of given two options would you like to use, type the name of your preferred browser and press enter. Wait for the installer to download the required web driver and unzip it. This could take a while.<br/><br/>
 - When the installer shows you a prompt to tell it which software is associated with torrents in your system, type the name of the software associated with torrents and press enter. To find out which software is supported by your system -
   - Search for default apps in your search menu
   - Click on `Choose default apps by file type`
