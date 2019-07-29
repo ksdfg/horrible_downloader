@@ -1,21 +1,22 @@
-# python script to update your currently watching list
+# python script to download a batch of episodes
 
 # add horriblehome to sys.path
 import sys
 import os
+
 sys.path.append(os.path.expandvars('%horriblehome%'))
 
 from bs4 import BeautifulSoup as bs
 import requests
-import horriblefiles.horrible_functions as hf
 from horriblefiles.user_preferences import preferences
-from pyautogui import hotkey
+import horriblefiles.horrible_functions as hf
+from pyautogui import getWindowsWithTitle
 
 # get a list of ALL shows available on horriblesubs.info
 # make sure iDOLM@STER doesn't get replaced by [email protected]
 tags = bs(requests.get("https://horriblesubs.info/shows/").text,
           features='html.parser').select('div [class = "ind-show"] > a')
-all_shows = list(map(lambda x: x.text.replace('[email protected]', 'iDOLM@STER'),tags))
+all_shows = list(map(lambda x: x.text.replace('[email protected]', 'iDOLM@STER'), tags))
 for i in range(len(all_shows)):
     if all_shows[i].find(chr(8211)) != -1:
         all_shows[i] = all_shows[i].replace(chr(8211), chr(45))
@@ -33,89 +34,68 @@ while True:
     else:
         break
 
-print('\nOpening', name, 'in web driver...')
-
-# open a web driver according to browser preference
-driver = hf.drivers[preferences['browser']](executable_path=preferences['driver_path'])
-# driver.implicitly_wait(10)  # make driver inherently wait for 10s after opening a page
-os.system('cls')
-
-# parse html source of horriblesubs.info shows page
-driver.get("https://horriblesubs.info" + tags[all_shows.index(name)].get('href'))
-
-# get last episode released
-last = driver.find_element_by_xpath('//*[@class="hs-shows"]/div[1]').get_attribute('id').split('v')[0]
-hotkey('alt', '\t')     # bring focus back to downloader from driver
+start = end = 0
 
 # take input of which episode to start from
 while True:
     start = input("\nEnter the starting episode (Press 0 to start from first episode) : ")
     if int(start) < 0:
         print("Invalid episode number")
-    elif int(start) > int(last):
-        print("Start episode cannot be greater than the last episode of Anime")
+    elif start == '0':  # get first episode released
+        start = hf.getEpisode(name, 'asc')
+        break
     else:
-        if len(start) is 1:
-            start = '0' + start
+        # check if ep exists
+        soup = bs(requests.get('https://nyaa.si/user/HorribleSubs?f=0&c=1_2&q=' + name.replace(' ', '+') + '+' + start +
+                               '+' + preferences['quality']).text, features='html.parser')
+        if (len(soup.select('td[class="success"]'))) == 0:
+            print('Cannot find episode')
+            continue
+        start = int(start)
         break
 
-# take input of which episode to end with
+# take input of which episode to end at from
 while True:
-    end = input("\nEnter the ending episode (Press 0 to end on last episode) : ")
-    if end is '0':
-        end = last
-        break
-    elif int(end) < 0:
+    end = input("\nEnter the ending episode (Press 0 to end at last episode) : ")
+    if int(end) < 0:
         print("Invalid episode number")
-    elif int(end) > int(last):
-        print("Ending episode number has not been released yet")
-    elif int(end) < int(start):
-        print("You cannot end before you start")
+    elif end == '0':  # get last episode released
+        end = hf.getEpisode(name, 'desc')
+        break
     else:
-        if len(end) is 1:
-            end = '0' + end
+        # check if ep exists
+        soup = bs(requests.get('https://nyaa.si/user/HorribleSubs?f=0&c=1_2&q=' + name.replace(' ', '+') + '+' + end +
+                               '+' + preferences['quality']).text, features='html.parser')
+        if (len(soup.select('td[class="success"]'))) == 0:
+            print('Cannot find episode')
+            continue
+        end = int(end)
         break
-
-# Create smallest list of all episode numbers that includes given episode
-print('\nGetting list of episodes of', name, '...')
-episodes = hf.get_episode_list(driver, start)
-
-if start == '00':
-    start = episodes[-1]    # set starting episode to first ep released in horrible
-
-# get index of start (made for the cases when only v2 of an ep is available)
-start_ind = -1
-for i in range(len(episodes)):
-    if episodes[i].find(start) > -1:
-        start_ind = i
-        break
-
-# get index of end (made for the cases when only v2 of an ep is available)
-end_ind = -1
-for i in range(len(episodes)):
-    if episodes[i].find(end) > -1:
-        end_ind = i
-        break
-
-episodes = episodes[end_ind: start_ind+1]   # list of all eps we need to download
-episodes.reverse()
 
 # define path where episode is to be downloaded
 path = preferences['download_path'] + name
 if not os.path.exists(path):
     os.mkdir(path)  # if directory doesn't exist, make one
 
-# startup procedure for torrent software
-hf.torrent_startup[preferences['torrent']]()
+# start downloads
+print('\nStarting Downloads')
+for i in range(start, end+1):
+    ep = str(i)
+    if len(ep) == 1:
+        ep = '0' + ep
 
-# loop to start all downloads
-print('\nStarting downloads...\n')
-hf.start_downloads(episodes, driver, path)
+    soup = bs(requests.get(
+        'https://nyaa.si/user/HorribleSubs?f=0&c=1_2&q=' + name.replace(' ', '+') + '+' + ep + '+' + preferences[
+            'quality']).text, features='html.parser')
+    links = [i.get('href') for i in soup.select('td[class="text-center"] > a')
+             if 'fa-magnet' in i.findChild('i').get('class')]
 
-driver.close()  # once you have checked all links, close the web driver
+    for link in links:
+        os.startfile(link)
+        hf.torrents[preferences['torrent']](path)
 
-# Give the user time to read status report
-input('\nPress enter to quit! :)')
-
-# kill the chromedriver that doesn't kill itself...
-os.system('taskkill /im "chromedriver.exe" /f')
+# close μTorrent
+window = getWindowsWithTitle('μTorrent')
+if len(window) > 0:
+    for w in window:
+        w.close()

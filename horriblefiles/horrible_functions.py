@@ -7,18 +7,11 @@ import os
 sys.path.append(os.path.expandvars('%horriblehome%'))
 
 from collections import defaultdict as dd
-from selenium import webdriver as wbd
 from time import sleep
 import pyautogui as pog
-from selenium.common.exceptions import NoSuchElementException
-from horriblefiles.user_preferences import preferences
-from re import compile
-
-# Dictionary of web drivers according to browser
-drivers = {
-    'firefox': wbd.Firefox,
-    'chrome': wbd.Chrome
-}
+import requests
+from bs4 import BeautifulSoup as bs
+import re
 
 
 # Function for when magnet link is opened in utorrent
@@ -53,13 +46,6 @@ torrents = {
     'qbittorrent': qbittorrent_download
 }
 
-# dictionary that stores urls that download respective web driver and names of web drivers
-download_driver = {
-    'firefox': ['https://github.com/mozilla/geckodriver/releases/download/v0.24.0/geckodriver-v0.24.0-win',
-                'geckodriver'],
-    'chrome': ['https://chromedriver.storage.googleapis.com/74.0.3729.6/chromedriver_win32', 'chromedriver']
-}
-
 
 # function to startup qbittorrent in the beginning
 def qbittorrent_startup():
@@ -76,53 +62,16 @@ torrent_startup = dd(lambda: lambda: None)
 torrent_startup['qbittorrent'] = qbittorrent_startup
 
 
-# function that returns smallest list of all episode numbers that includes given episode
-def get_episode_list(driver, ep):
-    # press show more till we can see the start episode
-    while True:
-        try:
-            driver.find_element_by_xpath('//*[@id="' + ep + '"]')
-            break  # if we can find start, it'll break from loop
-
-        except NoSuchElementException:  # Thrown if driver can't find start
-
-            try:
-                driver.find_element_by_xpath('//*[@class="show-more"]/a').click()  # click on "show more" button
-                sleep(0.7)
-            except NoSuchElementException:  # Thrown if there's no more to show
-                break
-
-    # Create a list of all episode numbers visible
-    return list(map(lambda x: x.get_attribute('id'), driver.find_elements_by_xpath('//*[@class="hs-shows"]/div')))
-
-
-# function that iterates through a list of episodes and starts downloads of each
-def start_downloads(episodes, driver, path):
-    i = 0   # number of episodes downloaded
-    for ep in episodes:
-        try:
-            # open magnet link of ep in preferred quality of user
-            os.startfile(
-                driver.find_element_by_xpath(
-                    '//*[@id="' + ep + '-' + preferences['quality'] + '"]/span[2]/a').get_attribute
-                ('href')
-            )
-        except NoSuchElementException:  # thrown if no magnet link of required quality found
-            print("No Download link for episode", ep, preferences['quality'], "T-T")
-            continue
-
-        # start downloading torrent from your preferred software
-        torrents[preferences['torrent']](path)
-
-        # give confirmation message to user on terminal
-        print("Downloading episode", ep, "now :)")
-
-        i += 1  # increase number of episodes downloaded
-
-    # close μTorrent
-    window = pog.getWindowsWithTitle('μTorrent')
-    if len(window) > 0:
-        for w in window:
-            w.close()
-
-    return i
+def getEpisode(name, order):
+    soup = bs(requests.get('https://nyaa.si/user/HorribleSubs?f=0&c=1_2&q=' + name.replace(' ', '+') +
+                           '+720p' + '&s=id&o=' + order).text, features='html.parser')
+    # get name of first ep released
+    ep = -1
+    epNames = soup.select('tr.success > td:nth-child(2)')
+    for epName in epNames:
+        title = [i.text for i in epName.findChildren('a') if not i.findChild('i')][0]
+        if re.findall('\[HorribleSubs\] '+name+' - \d+.* \[.+\]\.mkv', title):
+            # get the ep number from that name
+            ep = int(re.compile('\d+').findall(re.compile(' - \d+.* \[').findall(title)[0])[0])
+            break
+    return ep

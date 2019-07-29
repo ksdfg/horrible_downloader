@@ -1,49 +1,15 @@
 # file to be run to setup horrible downloader
 import os
 import sys
+import re
 
 # install required modules
 os.system('pip install -r horriblefiles\\requirements.txt')
-os.system('setx horriblehome "' + os.getcwd() + '"')    # set path to directory having horrible_downloader as env variable
+
+# set path to directory having horrible_downloader as env variable
+os.system('setx horriblehome "' + os.getcwd() + '"')
 sys.path.append(os.getcwd())
 os.system('cls')
-
-import requests
-import re
-import horriblefiles.horrible_functions as hf
-import zipfile
-import io
-import sys
-
-# take input of what browser to use
-while True:
-    browser = input('horrible downloader right now supports two browsers - Mozilla Firefox and Google Chrome.'
-                    '\nWe require you to choose which one horrible downloader will use.'
-                    '\nBrowser : ').lower()
-    # select correct browser according to user input
-    if re.search('firefox', browser):
-        browser = 'firefox'
-        break
-    elif re.search('chrome', browser):
-        browser = 'chrome'
-        break
-    else:
-        print('Invalid response. Please check your answer is one of the provided options and try again')
-
-# installing web driver
-driver_path = os.path.join(os.getcwd(), 'horriblefiles', 'webdriver')
-if not os.path.exists(driver_path):
-    os.mkdir(driver_path)  # if directory doesn't exist, make one
-if not os.path.exists(os.path.join(driver_path, hf.download_driver[browser][1] + '.exe')):
-    print('Downloading web driver...')
-    # download file from github
-    win = '64' if 'PROGRAMFILES(X86)' in os.environ else '32'
-    r = requests.get(hf.download_driver[browser][0] + (win if browser == 'firefox' else '') + '.zip', stream=True)
-    print('Downloaded zip file from the internet.\nExtracting zip file...')
-    r = zipfile.ZipFile(io.BytesIO(r.content))  # convert file to zip file
-    r.extractall(driver_path)   # extract zip file at given path
-    print('extracted zip file.')
-driver_path += '\\' + hf.download_driver[browser][1] + '.exe'    # make driver path be path to driver.exe and return it
 
 # Take input of torrent downloading software used
 while True:
@@ -78,8 +44,6 @@ f = open('horriblefiles/user_preferences.py', 'r')
 pref = f.read()
 f.close()
 
-pref = re.sub("browser': '.+'", "browser': '"+browser+"'", pref)
-pref = re.sub("driver_path': r'.+'", "driver_path': r'"+driver_path.replace("\\", "\\\\")+"'", pref)
 pref = re.sub("torrent': '.+'", "torrent': '"+torrent+"'", pref)
 pref = re.sub("download_path': '.+'", "download_path': '"+download_path.replace("\\", "\\\\\\\\")+"\\\\\\\\'", pref)
 pref = re.sub("quality': '.+'", "quality': '"+quality+"'", pref)
@@ -97,4 +61,6 @@ print("We're done installing the basic softwares! Now let's make a list of anime
 import horriblefiles.update_anime
 
 # schedule check of ongoing series
-os.system(r'schtasks /create /sc minute /mo 15 /tn "horribletasks\check currently watching" /tr "\"' + sys.executable.replace('python.exe', 'pythonw.exe') + r'\" \"' + os.getcwd() + r'\horriblefiles\ongoing_downloader.pyw\""')
+os.system(r'schtasks /create /sc minute /mo 15 /tn "horribletasks\check currently watching" /tr "\"' +
+          sys.executable.replace('python.exe', 'pythonw.exe') + r'\" \"' + os.getcwd() +
+          r'\horriblefiles\ongoing_downloader.pyw\""')
