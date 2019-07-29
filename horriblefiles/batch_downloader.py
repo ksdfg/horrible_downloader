@@ -49,6 +49,7 @@ while True:
         epNames = soup.select('tr.success > td:nth-child(2)')
         for epName in epNames:
             title = [i.text for i in epName.findChildren('a') if not i.findChild('i')][0]
+            print(title)
             if re.match('[HorribleSubs] '+name+' - \d+ [.+].mkv', title):
                 # get the ep number from that name
                 start = int(re.compile(' - \d+ \[').findall(title)[0].replace(' - ', '').replace(' [', ''))
