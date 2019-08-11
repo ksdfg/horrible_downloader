@@ -36,8 +36,10 @@ for i in shows.keys():
 
     ep_on_record = int(ep)
 
+    # search on erai raws
     ep = hf.getCurrentEpisodes('Erai-raws', i, links, ep)
 
+    # if nothing on erai raws, search on horrible
     if int(ep) == ep_on_record:
         ep = hf.getCurrentEpisodes('HorribleSubs', i, links, ep)
 
