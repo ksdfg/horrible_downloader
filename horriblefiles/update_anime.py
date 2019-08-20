@@ -3,21 +3,13 @@
 # add horriblehome to sys.path
 import sys
 import os
+
 sys.path.append(os.path.expandvars('%horriblehome%'))
 
 from horriblefiles.currently_watching import shows
 from bs4 import BeautifulSoup as bs
 import requests
 import re
-
-# get a list of ALL currently airing shows
-# make sure iDOLM@STER doesn't get replaced by [email protected]
-tags = bs(requests.get("https://horriblesubs.info/release-schedule/").text,
-          features='html.parser').select('a[title = "See all releases for this show"]')
-curr_shows = list(map(lambda x: x.text.replace('[email protected]', 'iDOLM@STER'), tags))
-for i in range(len(curr_shows)):
-    if curr_shows[i].find(chr(8211)) != -1:
-        curr_shows[i] = curr_shows[i].replace(chr(8211), chr(45))
 
 special_chars = ['+', '*', '.', '|', '(', ')', '$', '[', ']']  # set of all special chars in patterns
 
@@ -27,16 +19,26 @@ while True:
           '\n2. Remove anime from currently watching\t(type 2 to select this)'
           '\n3. Change episode to start downloading from of anime in currently watching list\t(type 3 to select this)'
           '\n4. Clear currently watching list\t(type 4 to select this)'
-          '\n5. Exit\t(type 5 to select this)')     # printing options
+          '\n5. Exit\t(type 5 to select this)')  # printing options
     choice = input('\nChoice : ')
 
-    if choice == '5':   # user wants to exit
+    if choice == '5':  # user wants to exit
         break
 
-    elif choice == '1':     # user wants to add anime to list
+    elif choice == '1':  # user wants to add anime to list
 
-        name = input('\nEnter name of anime as written in the schedule of horriblesubs.info'
-                     '\nLink to schedule - https://horriblesubs.info/release-schedule/'
+        # get a list of ALL currently airing shows
+        # make sure iDOLM@STER doesn't get replaced by [email protected]
+        tags = bs(requests.get("https://horriblesubs.info/release-schedule/").text,
+                  features='html.parser').select('a[title = "See all releases for this show"]')
+        curr_shows = list(map(lambda x: x.text.replace('[email protected]', 'iDOLM@STER'), tags))
+        for i in range(len(curr_shows)):
+            if curr_shows[i].find(chr(8211)) != -1:
+                curr_shows[i] = curr_shows[i].replace(chr(8211), chr(45))
+
+        print('\nCurrently airing shows : ', *curr_shows, sep='\n')
+
+        name = input('\nEnter name of anime as given in the list above'
                      '\nName : ').replace(chr(8211), chr(45))
 
         if name not in curr_shows:
@@ -70,8 +72,10 @@ while True:
         print('\nAnime added!')
 
     elif choice == '2':
-        name = input('\nEnter name of anime as written in the schedule of horriblesubs.info'
-                     '\nLink to schedule - https://horriblesubs.info/release-schedule/'
+
+        print('\nCurrently watching anime :', *shows.keys(), sep='\n')
+        
+        name = input('\nEnter name of anime as written in list above'
                      '\nName : ').replace(chr(8211), chr(45))
 
         try:
@@ -81,9 +85,9 @@ while True:
             f.close()
 
             # remove show from list
-            pattern_name = name     # copy of name to be used in the pattern
+            pattern_name = name  # copy of name to be used in the pattern
             for i in special_chars:
-                pattern_name = pattern_name.replace(i, '\\'+i)      # add \ to escape special sequence
+                pattern_name = pattern_name.replace(i, '\\' + i)  # add \ to escape special sequence
             cw = re.sub('\n.+"' + pattern_name + '".+,\n', '\n', cw)
             cw = re.sub(',\n.+"' + pattern_name + '".+\n}', '\n}', cw)
             del shows[name]
@@ -99,8 +103,10 @@ while True:
         print('\nAnime removed!')
 
     elif choice == '3':
-        name = input('\nEnter name of anime as written in the schedule of horriblesubs.info'
-                     '\nLink to schedule - https://horriblesubs.info/release-schedule/'
+
+        print('\nCurrently watching anime :', *shows.keys(), sep='\n')
+
+        name = input('\nEnter name of anime as written in list above'
                      '\nName : ').replace(chr(8211), chr(45))
 
         if name not in shows.keys():
@@ -119,9 +125,9 @@ while True:
         f.close()
 
         # update show in list
-        pattern_name = name     # copy of name to be used in the pattern
+        pattern_name = name  # copy of name to be used in the pattern
         for i in special_chars:
-            pattern_name = pattern_name.replace(i, '\\'+i)      # add \ to escape special sequence
+            pattern_name = pattern_name.replace(i, '\\' + i)  # add \ to escape special sequence
         cw = re.sub(pattern_name + '": \d+', name + '": ' + ep, cw)
 
         # update the currently watching list

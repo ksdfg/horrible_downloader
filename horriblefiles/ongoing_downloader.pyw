@@ -1,16 +1,14 @@
 # checks and downloads episodes of anime in the currently watching list
 
+import os
 # add horriblehome to sys.path
 import sys
-import os
 
 sys.path.append(os.path.expandvars('%horriblehome%'))
 
 from horriblefiles.currently_watching import shows
 import horriblefiles.horrible_functions as hf
 from horriblefiles.user_preferences import preferences
-from bs4 import BeautifulSoup as bs
-from requests import get
 import ctypes
 from pyautogui import getWindowsWithTitle
 from threading import Thread
@@ -93,3 +91,5 @@ if len(links) != 0:
         # Give the user time to read status report
         ctypes.windll.user32.MessageBoxW(0, "finished downloading all possible episodes :)", "horrible downloader",
                                          0x1000)  # popup
+
+exit(0)
