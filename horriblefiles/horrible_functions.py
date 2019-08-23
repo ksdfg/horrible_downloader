@@ -32,13 +32,15 @@ def utorrent_download(path):
 # Function for when magnet link is opened in qbittorrent
 def qbittorrent_download(path):
     while True:
-        if pog.getWindowsWithTitle('Magnet Link'):
+        if pog.getWindowsWithTitle('[HorribleSubs]'):
             break
         sleep(0.2)
-    pog.press(['\t', '\t', 'up', '\t', '\t'])
-    pog.typewrite(path)  # enter path where you want to store the downloaded episode
+
+    pog.press(['\t', '\t', '\t', '\t'])
+    pog.typewrite(path)     # enter path where you want to store the downloaded episode
+
     sleep(0.5)
-    pog.press(['\t', '\t', '\t', '\t', '\t', '\t', '\t', '\t', '\t', '\t', 'space', 'enter'])
+    pog.press(['\t', '\t', '\t', '\t', '\t', '\t', '\t', 'space', 'enter'])
     sleep(1)
 
 
