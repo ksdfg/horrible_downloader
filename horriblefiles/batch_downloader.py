@@ -39,6 +39,8 @@ start = end = 0
 # take input of which episode to start from
 while True:
     start = input("\nEnter the starting episode (Press 0 to start from first episode) : ")
+    if len(start) == 1:
+        start = '0' + start
     if int(start) < 0:
         print("Invalid episode number")
     elif start == '0':  # get first episode released
@@ -48,7 +50,7 @@ while True:
         # check if ep exists
         soup = bs(requests.get('https://nyaa.si/user/HorribleSubs?f=0&c=1_2&q=' + name.replace(' ', '+') + '+' + start +
                                '+' + preferences['quality']).text, features='html.parser')
-        if (len(soup.select('td[class="success"]'))) == 0:
+        if (len(soup.select('tr[class="success"]'))) == 0:
             print('Cannot find episode')
             continue
         start = int(start)
@@ -57,6 +59,8 @@ while True:
 # take input of which episode to end at from
 while True:
     end = input("\nEnter the ending episode (Press 0 to end at last episode) : ")
+    if len(end) == 1:
+        end = '0' + end
     if int(end) < 0:
         print("Invalid episode number")
     elif end == '0':  # get last episode released
@@ -66,7 +70,7 @@ while True:
         # check if ep exists
         soup = bs(requests.get('https://nyaa.si/user/HorribleSubs?f=0&c=1_2&q=' + name.replace(' ', '+') + '+' + end +
                                '+' + preferences['quality']).text, features='html.parser')
-        if (len(soup.select('td[class="success"]'))) == 0:
+        if (len(soup.select('tr[class="success"]'))) == 0:
             print('Cannot find episode')
             continue
         end = int(end)
