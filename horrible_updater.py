@@ -2,6 +2,7 @@ import io
 import os
 import shutil
 import zipfile
+import re
 
 import requests
 
@@ -21,7 +22,10 @@ print('extracted zip file.')
 src = os.getcwd() + r'\horrible_downloader'
 dest = os.getcwd()
 
-from horrible_downloader.horrible_updater import flag_version as fv
+# check whats the flag version in latest release
+fv = ""
+with open(r'horrible_downloader\horrible_updater.py', 'r') as f:
+    fv = re.compile('\d+\.\d+\.\d+').findall(f.read())
 
 # walk through cwd and replace files with new ones from latest release
 for src_dir, dirs, files in os.walk(src):
