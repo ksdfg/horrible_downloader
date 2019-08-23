@@ -1,8 +1,8 @@
 # python script to update your currently watching list
 
+import os
 # add horriblehome to sys.path
 import sys
-import os
 
 sys.path.append(os.path.expandvars('%horriblehome%'))
 
