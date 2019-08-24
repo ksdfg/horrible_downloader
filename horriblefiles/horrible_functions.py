@@ -1,9 +1,9 @@
 # This file basically has all the functions and dictionaries that allow our system to be modular
 # Which functions / variables are used depends on the user's preference settings
 
+import os
 # add horriblehome to sys.path
 import sys
-import os
 
 sys.path.append(os.path.expandvars('%horriblehome%'))
 

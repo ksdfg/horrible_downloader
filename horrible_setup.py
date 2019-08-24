@@ -1,7 +1,7 @@
 # file to be run to setup horrible downloader
 import os
-import sys
 import re
+import sys
 
 # install required modules
 os.system('pip install -r horriblefiles\\requirements.txt')
@@ -58,7 +58,6 @@ os.system('cls')
 # Make your currently watching list
 print("We're done installing the basic softwares! Now let's make a list of anime you are watching this season :)"
       "\nPlease wait while we bring up the currently watching list updater...")
-import horriblefiles.update_anime
 
 # schedule check of ongoing series
 os.system(r'schtasks /create /sc minute /mo 15 /tn "horribletasks\check currently watching" /tr "\"' +

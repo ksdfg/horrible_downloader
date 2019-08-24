@@ -1,8 +1,8 @@
 import io
 import os
+import re
 import shutil
 import zipfile
-import re
 
 import requests
 
@@ -23,7 +23,7 @@ fv = ""
 with open(r'latest\horrible_updater.py', 'r') as f:
     fv = re.compile('\d+\.\d+\.\d+').findall(f.read())[0]
     if fv != flag_version:
-        choice = input('This update will clear your currently watching list and preferences - '
+        choice = input('\nThis update will clear your currently watching list and preferences - '
                        '\ntake backup of currently_watching.py' 
                        'and user_preferences.py from horriblefiles, and then press enter.')
 
