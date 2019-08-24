@@ -1,31 +1,31 @@
 import io
 import os
+import re
 import shutil
 import zipfile
-import re
 
 import requests
 
-if input('\nThis will clear your preferences - you will have to setup again.'
-         '\nStill want to update? (y/n) - ') != 'y':
-    exit(0)
-
 flag_version = "1.1.0"
+
+src = os.getcwd() + r'\latest'
+dest = os.getcwd()
 
 print('\nDownloading updates...')
 r = requests.get('https://github.com/ksdfg/horrible_downloader/releases/latest/download/horrible_downloader.zip',
                  stream=True)
 print('Downloaded zip file from the internet.\nExtracting zip file...')
 r = zipfile.ZipFile(io.BytesIO(r.content))  # convert file to zip file
-r.extractall(os.getcwd())  # extract zip file at given path
+r.extractall(src)  # extract zip file at given path
 print('extracted zip file.')
-src = os.getcwd() + r'\horrible_downloader'
-dest = os.getcwd()
-
 # check whats the flag version in latest release
 fv = ""
-with open(r'horrible_downloader\horrible_updater.py', 'r') as f:
-    fv = re.compile('\d+\.\d+\.\d+').findall(f.read())
+with open(r'latest\horrible_updater.py', 'r') as f:
+    fv = re.compile('\d+\.\d+\.\d+').findall(f.read())[0]
+    if fv != flag_version:
+        choice = input('\nThis update will clear your currently watching list and preferences - '
+                       '\ntake backup of currently_watching.py' 
+                       'and user_preferences.py from horriblefiles, and then press enter.')
 
 # walk through cwd and replace files with new ones from latest release
 for src_dir, dirs, files in os.walk(src):

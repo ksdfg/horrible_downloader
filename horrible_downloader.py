@@ -16,12 +16,15 @@ while True:
 
     elif choice == '1':
         print('\nStarting checks...\n')
+        import horriblefiles.ongoing_downloader
 
     elif choice == '2':
         print('\nStarting the batch downloader...')
+        import horriblefiles.batch_downloader
 
     elif choice == '3':
         print('\nBringing up the currently watching list updater...')
+        import horriblefiles.update_anime
 
     elif choice == '4':
 
