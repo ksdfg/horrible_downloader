@@ -86,6 +86,14 @@ def getCurrentEpisodes(site, show, links, ep):
         soup = bs(requests.get(
             'https://nyaa.si/user/' + site + '?f=0&c=1_2&q=' + show.replace(' ', '+') + '+' + ep + '+' + preferences[
                 'quality']).text, features='html.parser')
+
+        # check if required episode is released
+        for i in soup.select('tr[class="default"] > td[colspan="2"] > a'):
+            if re.match('[.+] .+ - '+ep, str(i.get('title'))):
+                break
+        else:
+            return ep
+        
         link = [i.get('href') for i in soup.select('td[class="text-center"] > a') if
                 'fa-magnet' in i.findChild('i').get('class')]
         if len(link) == 0:
