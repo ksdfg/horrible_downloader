@@ -2,11 +2,11 @@
 
 preferences = {
     # the torrent downloading software to be used
-    'torrent': ' ',
+    'torrent': 'utorrent',
 
     # path where all anime is to be downloaded
-    'download_path': ' ',
+    'download_path': 'k:\\anime\\',
 
     # Quality in which user wants to download episode
-    'quality': ' '
+    'quality': '1080p'
 }

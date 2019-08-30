@@ -83,14 +83,9 @@ def getEpisode(name, order):
 
 def getCurrentEpisodes(site, show, links, ep):
     while True:
-        print('https://nyaa.si/user/' + site + '?f=0&c=1_2&q=' + show.replace(' ', '+') + '+' + ep + '+' + preferences[
-                'quality'])
-        
         soup = bs(requests.get(
             'https://nyaa.si/user/' + site + '?f=0&c=1_2&q=' + show.replace(' ', '+') + '+' + ep + '+' + preferences[
                 'quality']).text, features='html.parser')
-
-        print('\[.+\] .+ - ' + ep + '.+')
 
         # check if required episode is released
         for i in soup.select('tr > td[colspan="2"] > a'):
