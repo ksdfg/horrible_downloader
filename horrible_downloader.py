@@ -1,14 +1,19 @@
 # main menu
 import os
 import re
+from pyfiglet import Figlet
+
+# print our name!!
+os.system('color 0a')
+print(Figlet(font='slant').renderText('horrible downloader'))
 
 while True:
 
     print('\n1. Check and download new episodes of anime in your currently watching list\t(type 1 to select this)'
           '\n2. Batch download of episodes of an anime\t(type 2 to select this)'
           '\n3. Update currently watching list\t(type 3 to select this)'
-          '\n4. Update preferences\t(type 3 to select this)'
-          '\n5. Exit\t(type 4 to select this)')  # printing options
+          '\n4. Update preferences\t(type 4 to select this)'
+          '\n5. Exit\t(type 5 to select this)')  # printing options
     choice = input('\nChoice : ')
 
     if choice == '5':

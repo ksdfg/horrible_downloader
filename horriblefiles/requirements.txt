@@ -1,3 +1,4 @@
 beautifulsoup4
 pyautogui
 requests
+pyfiglet
