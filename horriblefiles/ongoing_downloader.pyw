@@ -1,16 +1,14 @@
 # checks and downloads episodes of anime in the currently watching list
 
+import os
 # add horriblehome to sys.path
 import sys
-import os
 
 sys.path.append(os.path.expandvars('%horriblehome%'))
 
 from horriblefiles.currently_watching import shows
 import horriblefiles.horrible_functions as hf
 from horriblefiles.user_preferences import preferences
-from bs4 import BeautifulSoup as bs
-from requests import get
 import ctypes
 from pyautogui import getWindowsWithTitle
 from threading import Thread
@@ -34,27 +32,14 @@ for i in shows.keys():
     if len(ep) == 1:
         ep = '0' + ep
 
-    while True:
-        soup = bs(get(
-            'https://nyaa.si/user/HorribleSubs?f=0&c=1_2&q=' + i.replace(' ', '+') + '+' + ep + '+' + preferences[
-                'quality']).text, features='html.parser')
-        link = [i.get('href') for i in soup.select('td[class="text-center"] > a') if
-                'fa-magnet' in i.findChild('i').get('class')]
-        if len(link) == 0:
-            break
+    ep_on_record = int(ep)
 
-        # define path where episode is to be downloaded
-        path = preferences['download_path'] + i
-        if not os.path.exists(path):
-            os.mkdir(path)  # if directory doesn't exist, make one
+    # search on erai raws
+    ep = hf.getCurrentEpisodes('Erai-raws', i, links, ep)
 
-        links.append({'magnet': link[0], 'path': path})
-
-        print("Queueing episode", ep, "for download :)")
-
-        ep = str(int(ep) + 1)
-        if len(ep) == 1:
-            ep = '0' + ep
+    # if nothing on erai raws, search on horrible
+    if int(ep) == ep_on_record:
+        ep = hf.getCurrentEpisodes('HorribleSubs', i, links, ep)
 
     # next time try to download the next episode by updating currently watching
     cw = cw.replace((i + '": ' + str(shows[i])), (i + '": ' + str(int(ep))))
@@ -105,4 +90,6 @@ if len(links) != 0:
 
         # Give the user time to read status report
         ctypes.windll.user32.MessageBoxW(0, "finished downloading all possible episodes :)", "horrible downloader",
-                                 0x1000)  # popup
+                                         0x1000)  # popup
+
+exit(0)
