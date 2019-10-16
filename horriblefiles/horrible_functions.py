@@ -32,7 +32,7 @@ def utorrent_download(path):
 # Function for when magnet link is opened in qbittorrent
 def qbittorrent_download(path):
     while True:
-        if pog.getWindowsWithTitle('[HorribleSubs]'):
+        if pog.getWindowsWithTitle('[HorribleSubs]') or pog.getWindowsWithTitle('[Erai-Raws]'):
             break
         sleep(0.2)
 
