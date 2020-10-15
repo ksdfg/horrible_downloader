@@ -1,5 +1,8 @@
 # ***horrible downloader***
 
+[![No Maintenance Intended](http://unmaintained.tech/badge.svg)](http://unmaintained.tech/)
+![GitHub](https://img.shields.io/github/license/ksdfg/horrible_downloader)
+
 Automatically download all episodes of the currently airing anime that you are watching that you haven't already, as well as download multiple episodes of an anime without a batch file!
 
 <hr />
