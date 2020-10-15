@@ -1,5 +1,6 @@
 # ***horrible downloader***
 
+![GitHub last commit](https://img.shields.io/github/last-commit/ksdfg/horrible_downloader)
 [![No Maintenance Intended](http://unmaintained.tech/badge.svg)](http://unmaintained.tech/)
 ![GitHub](https://img.shields.io/github/license/ksdfg/horrible_downloader)
 
